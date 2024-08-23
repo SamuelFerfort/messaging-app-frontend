@@ -2,7 +2,7 @@ import { createContext, useState, useEffect, useContext } from "react";
 import { jwtDecode } from "jwt-decode";
 import PropTypes from "prop-types";
 const API_URL = import.meta.env.VITE_API_URL;
-
+const TOKEN_NAME = "whatsapp_clone_token";
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
@@ -12,14 +12,14 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkLoggedIn = () => {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem(TOKEN_NAME);
       if (token) {
         try {
           const decoded = jwtDecode(token);
           setUser({ id: decoded.id, name: decoded.name });
         } catch (err) {
           console.error("Invalid token", err);
-          localStorage.removeItem("token");
+          localStorage.removeItem(TOKEN_NAME);
         }
       }
     };
@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error("No token received from server");
       }
 
-      localStorage.setItem("token", token);
+      localStorage.setItem(TOKEN_NAME, token);
 
       const decoded = jwtDecode(token);
       setUser({ id: decoded.id, name: decoded.name });
@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }) => {
   };
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("token");
+    localStorage.removeItem(TOKEN_NAME);
   };
 
   return (

@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthProvider';
 
 function PublicRoute({ children }) {
   const { user } = useAuth();
+  console.log(user)
   
   if (user) {
     return <Navigate to="/chats" replace />;
