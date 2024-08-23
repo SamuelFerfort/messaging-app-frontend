@@ -1,20 +1,14 @@
-import "./App.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider } from "./contexts/AuthProvider";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-const queryClient = new QueryClient();
-import Login from "./Pages/Login";
+import { useAuth } from "./contexts/AuthProvider";
+import { Navigate } from "react-router-dom";
 
+function App({ children }) {
+  const { user } = useAuth();
 
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
-function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Login />
-      </AuthProvider>
-    </QueryClientProvider>
-  );
+  return children;
 }
 
 export default App;

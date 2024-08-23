@@ -27,7 +27,7 @@ export default function Login() {
 
     try {
       await login();
-      navigate("/chats");
+      navigate("/chats", {replace: true});
     } catch (err) {}
     setError((prev) => ({
       ...prev,

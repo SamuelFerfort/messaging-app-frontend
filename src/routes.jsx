@@ -3,30 +3,41 @@ import Login from "./Pages/Login";
 import SignUp from "./Pages/SignUp";
 import Chats from "./Pages/Chats";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PublicRoute from "./Components/PublicRoute";
 
-const routes = (isAuthenticated) => [
+const router = createBrowserRouter([
   {
     path: "/",
-    element: isAuthenticated ? <Navigate to="/chats" replace /> : <Navigate to="/login" replace />,
+    element: <Navigate to="/login" replace />,
   },
   {
     path: "/login",
-    element: isAuthenticated ? <Navigate to="/chats" replace /> : <Login />,
+    element: (
+      <PublicRoute>
+        <Login />
+      </PublicRoute>
+    ),
   },
   {
     path: "/sign-up",
-    element: isAuthenticated ? <Navigate to="/chats" replace /> : <SignUp />,
+    element: (
+      <PublicRoute>
+        <SignUp />
+      </PublicRoute>
+    ),
   },
   {
     path: "/chats",
-    element: <ProtectedRoute><Chats /></ProtectedRoute>,
+    element: (
+      <ProtectedRoute>
+        <Chats />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "*",
-    element: <Navigate to="/" replace />,
+    element: <Navigate to="/login" replace />,
   },
-];
+]);
 
-const createRouter = (isAuthenticated) => createBrowserRouter(routes(isAuthenticated));
-
-export default createRouter;
+export default router;
