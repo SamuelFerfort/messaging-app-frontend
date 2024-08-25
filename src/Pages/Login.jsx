@@ -27,12 +27,13 @@ export default function Login() {
 
     try {
       await login();
-      navigate("/chats", {replace: true});
-    } catch (err) {}
-    setError((prev) => ({
-      ...prev,
-      general: err.message || "Failed to log in. Please try again.",
-    }));
+      navigate("/chats", { replace: true });
+    } catch (err) {
+      setError((prev) => ({
+        ...prev,
+        general: err.message || "Failed to log in. Please try again.",
+      }));
+    }
   }
 
   return (
