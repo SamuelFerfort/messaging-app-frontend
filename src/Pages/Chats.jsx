@@ -1,12 +1,57 @@
+import { useState } from "react";
 import { useAuth } from "../contexts/AuthProvider";
+import ChatList from "../Components/ChatList";
+import Profile from "../Components/Profile";
+import Settings from "../Components/Settings";
+
+
+
 
 export default function Chats() {
   const { logout } = useAuth();
-
+  const [activeTab, setActiveTab] = useState("chats");
   return (
-    <>
-      <h1>Chats</h1>
-      <button onClick={logout}>Log out</button>
-    </>
+    <main className="flex h-screen justify-center items-center py-5 px-28 ">
+      <div className="w-full h-full flex">
+        <aside className="w-full max-w-96 bg-slate-500 flex">
+          <nav className="flex flex-col bg-orange-300 min-w-8 p-2 ">
+            <button
+              onClick={() => setActiveTab("chats")}
+              className={`mr-2 ${
+                activeTab === "chats" ? "text-white" : "text-black"
+              }`}
+            >
+              Chats
+            </button>
+            <button
+              onClick={() => setActiveTab("settings")}
+              className={`mr-2 ${
+                activeTab === "settings" ? "text-white" : "text-black"
+              }`}
+            >
+              Settings
+            </button>
+            <button
+              onClick={() => setActiveTab("profile")}
+              className={`mr-2 ${
+                activeTab === "profile" ? "text-white" : "text-black"
+              }`}
+            >
+              Profile
+            </button>
+            <button onClick={logout}>Log out</button>
+          </nav>
+          <div className="flex-grow overflow-y-auto p-4">
+            <h1>Chats</h1>
+            {activeTab === "chats" && <ChatList />}
+            {activeTab === "settings" && <Settings />}
+            {activeTab === "profile" && <Profile />}
+          </div>
+        </aside>
+        <section className="bg-blue-500 max-w-full w-full">
+
+        </section>
+      </div>
+    </main>
   );
 }
