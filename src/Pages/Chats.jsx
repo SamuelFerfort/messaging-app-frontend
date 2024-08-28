@@ -1,16 +1,12 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthProvider";
-import ChatList from "../Components/ChatList";
+import ChatSidebar from "../Components/ChatSidebar";
 import Profile from "../Components/Profile";
 import Settings from "../Components/Settings";
 
 export default function Chats() {
   const { logout } = useAuth();
   const [activeTab, setActiveTab] = useState("chats");
-
-
-
-
 
   return (
     <main className="flex h-screen justify-center items-center py-5 px-28 ">
@@ -44,7 +40,7 @@ export default function Chats() {
             <button onClick={logout}>Log out</button>
           </nav>
           <div className="flex-grow overflow-y-auto p-4">
-            {activeTab === "chats" && <ChatList />}
+            {activeTab === "chats" && <ChatSidebar />}
             {activeTab === "settings" && <Settings />}
             {activeTab === "profile" && <Profile />}
           </div>
