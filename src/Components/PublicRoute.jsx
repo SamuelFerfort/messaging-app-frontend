@@ -3,12 +3,11 @@ import { useAuth } from "../contexts/AuthProvider";
 import PropTypes from "prop-types";
 
 PublicRoute.propTypes = {
-  children: PropTypes.children,
+  children: PropTypes.node,
 };
 
 function PublicRoute({ children }) {
   const { user } = useAuth();
-  console.log(user);
 
   if (user) {
     return <Navigate to="/chats" replace />;

@@ -3,7 +3,7 @@ import { useAuth } from "../contexts/AuthProvider";
 import PropTypes from "prop-types";
 
 ProtectedRoute.propTypes = {
-  children: PropTypes.children,
+  children: PropTypes.node,
 };
 
 function ProtectedRoute({ children }) {

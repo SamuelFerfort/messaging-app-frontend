@@ -24,9 +24,10 @@ export default function Login() {
     const { isValid, errors } = validateLoginForm(email, password);
 
     if (!isValid) return setError((prev) => ({ ...prev, ...errors }));
-
+    const credentials = {email, password}
     try {
-      await login();
+      
+      await login(credentials);
       navigate("/chats", { replace: true });
     } catch (err) {
       setError((prev) => ({
@@ -37,44 +38,62 @@ export default function Login() {
   }
 
   return (
-    <main className="flex justify-center h-screen items-center">
-      <form onSubmit={handleSubmit}>
-        <h1 className="text-2xl mb-6 ">Log in</h1>
-        <div>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          {error.email && (
-            <span className="text-red-400 text-sm">Invalid Email</span>
+    <main className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md">
+        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">Log in</h1>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+              Email
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              type="email"
+              name="email"
+              id="email"
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+            />
+            {error.email && (
+              <p className="text-red-500 text-xs italic mt-1">Invalid Email</p>
+            )}
+          </div>
+          <div className="mb-6">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+              Password
+            </label>
+            <input
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              type="password"
+              name="password"
+              id="password"
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="******************"
+            />
+            {error.password && (
+              <p className="text-red-500 text-xs italic">Password must be at least 6 characters</p>
+            )}
+          </div>
+          {error.general && (
+            <div className="text-red-500 text-sm mb-4">{error.general}</div>
           )}
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {error.password && (
-            <span className="text-red-400 text-sm">
-              Password must be at least 6 characters
-            </span>
-          )}
-        </div>
-        {error.general && (
-          <div className="text-red-400 text-sm mb-4">{error.general}</div>
-        )}
-        {loading && <div className="text-gray-400 mb-4">Loading...</div>}
-        <p>
-          No account? <Link to={"/sign-up"} />
-          Sign up
-        </p>
-      </form>
+          {loading && <div className="text-gray-500 mb-4">Loading...</div>}
+          <div className="flex items-center justify-between">
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="submit"
+            >
+              Sign In
+            </button>
+            <Link
+              className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+              to="/sign-up"
+            >
+              Sign up
+            </Link>
+          </div>
+        </form>
+      </div>
     </main>
   );
 }
