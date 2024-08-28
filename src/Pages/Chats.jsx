@@ -8,6 +8,10 @@ export default function Chats() {
   const { logout } = useAuth();
   const [activeTab, setActiveTab] = useState("chats");
 
+
+
+
+
   return (
     <main className="flex h-screen justify-center items-center py-5 px-28 ">
       <div className="w-full h-full flex">

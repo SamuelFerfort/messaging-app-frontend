@@ -1,10 +1,23 @@
 import PropTypes from "prop-types";
+import { useQuery } from "@tanstack/react-query";
+import { authenticatedFetch } from "../utils/api";
 
-ChatList.propTypes = {
-  users: PropTypes.array,
-};
 
-export default function ChatList({ users }) {
+export default function ChatList() {
+  const {
+    isLoading,
+    data: chats,
+    error,
+  } = useQuery({
+    queryKey: ["chats"],
+    queryFn: () => authenticatedFetch("/api/chats"),
+  });
+
+  if (isLoading) return <div>Loading chats...</div>;
+
+  if (error) return <div>Error fetching chats: {error.message}</div>;
+  console.log(chats)
+
   return (
     <>
       <h1>Chats</h1>
@@ -17,13 +30,19 @@ export default function ChatList({ users }) {
         <button>Groups</button>
       </nav>
 
-      {users && users.length > 0
-        ? users.map((user) => (
-            <div key={user.id} className="flex items-center">
-              user
+      {chats && chats.length > 0
+        ? chats.map((chat) => (
+            <div key={chat.id} className="flex items-center">
+              {chat.id}
             </div>
           ))
-        : "No chats open!"}
+        : (
+            <div>No chats open!</div>
+        )}
     </>
   );
 }
+
+ChatList.propTypes = {
+  users: PropTypes.array,
+};
