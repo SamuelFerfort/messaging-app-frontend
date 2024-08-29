@@ -39,11 +39,11 @@ export default function Chats() {
             </button>
             <button onClick={logout}>Log out</button>
           </nav>
-          <div className="flex-grow overflow-y-auto p-4">
+          <section className="flex-grow overflow-y-auto p-4">
             {activeTab === "chats" && <ChatSidebar />}
             {activeTab === "settings" && <Settings />}
             {activeTab === "profile" && <Profile />}
-          </div>
+          </section>
         </aside>
         <section className="bg-blue-500 max-w-full w-full">
           <header></header>
