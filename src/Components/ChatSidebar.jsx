@@ -2,8 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import { authenticatedFetch } from "../utils/api";
 import { useState } from "react";
 import filterItems from "../utils/filterItems";
+import PropTypes from "prop-types";
 
-export default function ChatSidebar() {
+ChatSidebar.propTypes = {
+  handleChatStart: PropTypes.func,
+};
+
+export default function ChatSidebar({ handleChatStart }) {
   const [activeTab, setActiveTabs] = useState("chats");
 
   const [filter, setFilter] = useState("");
@@ -61,12 +66,13 @@ export default function ChatSidebar() {
         <div>
           {filteredItems && filteredItems.length > 0 ? (
             filteredItems.map((user) => (
-              <div
+              <button
+                onClick={() => handleChatStart(user.id)}
                 key={user.id}
                 className="flex items-center p-2 hover:bg-gray-100"
               >
                 👤 {user.firstName} {user.lastName}
-              </div>
+              </button>
             ))
           ) : (
             <div>No users found!</div>

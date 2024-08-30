@@ -3,11 +3,33 @@ import { useAuth } from "../contexts/AuthProvider";
 import ChatSidebar from "../Components/ChatSidebar";
 import Profile from "../Components/Profile";
 import Settings from "../Components/Settings";
+import { authenticatedFetch } from "../utils/api";
+import ChatWindow from "../Components/ChatWindow";
 
 export default function Chats() {
   const { logout } = useAuth();
   const [activeTab, setActiveTab] = useState("chats");
+  const [activeChat, setActiveChat] = useState(null);
+  const [isChatLoading, setIsChatLoading] = useState(null);
+  const [newChatError, setNewChatError] = useState(null);
 
+  async function handleChatStart(otherUserId) {
+    setIsChatLoading(true);
+
+    try {
+      const chat = await authenticatedFetch("/api/chat/create", {
+        method: "POST",
+        body: { otherUserId },
+      });
+
+      setActiveChat(chat);
+    } catch (error) {
+      console.error("Failed to start chat:", error);
+      setNewChatError(error);
+    } finally {
+      setIsChatLoading(false);
+    }
+  }
   return (
     <main className="flex h-screen justify-center items-center py-5 px-28 ">
       <div className="w-full h-full flex">
@@ -40,18 +62,18 @@ export default function Chats() {
             <button onClick={logout}>Log out</button>
           </nav>
           <section className="flex-grow overflow-y-auto p-4">
-            {activeTab === "chats" && <ChatSidebar />}
+            {activeTab === "chats" && (
+              <ChatSidebar handleUserClick={handleChatStart} />
+            )}
             {activeTab === "settings" && <Settings />}
             {activeTab === "profile" && <Profile />}
           </section>
         </aside>
-        <section className="bg-blue-500 max-w-full w-full">
-          <header></header>
-          <main></main>
-          <footer>
-            <input type="text" className="w-full" />
-          </footer>
-        </section>
+        <ChatWindow
+          activeChat={activeChat}
+          loading={isChatLoading}
+          error={newChatError}
+        />
       </div>
     </main>
   );
