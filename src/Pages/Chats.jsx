@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useAuth } from "../contexts/AuthProvider";
 import Sidebar from "../Components/Sidebar";
 import Profile from "../Components/Profile";
-import Settings from "../Components/Settings";
 import { authenticatedFetch } from "../utils/api";
 import ChatWindow from "../Components/ChatWindow";
+import { MessageCircle, User, LogOut } from "lucide-react";
 
 export default function Chats() {
   const { logout } = useAuth();
@@ -12,8 +12,6 @@ export default function Chats() {
   const [activeChat, setActiveChat] = useState(null);
   const [isChatLoading, setIsChatLoading] = useState(null);
   const [newChatError, setNewChatError] = useState(null);
-
- 
 
   async function handleChatStart(otherUserId) {
     setIsChatLoading(true);
@@ -23,54 +21,59 @@ export default function Chats() {
         body: { otherUserId },
       });
 
-
       setActiveChat(chat);
     } catch (error) {
       console.error("Failed to start chat:", error);
-      
+
       setNewChatError(error);
     } finally {
       setIsChatLoading(false);
     }
   }
   return (
-    <main className="flex h-screen justify-center items-center py-5 px-28 ">
+    <main className="flex h-screen justify-center items-center py-5 px-28 bg-green-300">
       <div className="w-full h-full flex">
-        <aside className="w-full max-w-96 bg-slate-500 flex">
-          <nav className="flex flex-col bg-orange-300 min-w-8 p-2 ">
+        <aside className=" bg-gray-100 flex max-w-sm w-full">
+          <nav className="flex flex-col  min-w-14 items-center py-4 gap-5">
             <button
               onClick={() => setActiveTab("chats")}
-              className={`mr-2 ${
-                activeTab === "chats" ? "text-white" : "text-black"
+              className={` p-2 rounded-full ${
+                activeTab === "chats" ? "bg-gray-500 " : ""
               }`}
             >
-              Chats
+              <MessageCircle
+                className={`h-6 w-6  ${
+                  activeTab === "chats" ? " text-gray-200 " : "text-gray-600"
+                }`}
+              />
             </button>
-            <button
-              onClick={() => setActiveTab("settings")}
-              className={`mr-2 ${
-                activeTab === "settings" ? "text-white" : "text-black"
-              }`}
-            >
-              Settings
-            </button>
+
             <button
               onClick={() => setActiveTab("profile")}
-              className={`mr-2 ${
-                activeTab === "profile" ? "text-white" : "text-black"
+              className={` p-2 rounded-full ${
+                activeTab === "profile" ? "bg-gray-500 " : ""
               }`}
             >
-              Profile
+              <User
+                className={`h-6 w-6  ${
+                  activeTab === "profile" ? "text-gray-200" : "text-gray-600"
+                }`}
+              />
             </button>
-            <button onClick={logout}>Log out</button>
+            <button onClick={logout}>
+              <LogOut className="h-6 w-6 text-gray-600" />
+            </button>
           </nav>
-          <section className="flex-grow overflow-y-auto p-4">
+          <aside className="flex-grow overflow-y-auto  bg-white min-w-2xl  ">
             {activeTab === "chats" && (
-              <Sidebar handleChatStart={handleChatStart} setActiveChat={setActiveChat} />
+              <Sidebar
+                handleChatStart={handleChatStart}
+                setActiveChat={setActiveChat}
+                activeChat={activeChat}
+              />
             )}
-            {activeTab === "settings" && <Settings />}
             {activeTab === "profile" && <Profile />}
-          </section>
+          </aside>
         </aside>
         <ChatWindow
           chat={activeChat}

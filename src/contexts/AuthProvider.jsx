@@ -80,7 +80,12 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem(TOKEN_NAME, token);
 
       const decoded = jwtDecode(token);
-      setUser({ id: decoded.id, name: decoded.name });
+      setUser({
+        id: decoded.id,
+        name: decoded.name,
+        avatar: decoded.avatar,
+        about: decoded.about,
+      });
     } catch (err) {
       console.error("Login error", err);
       setError(err.message);
@@ -96,7 +101,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, login, logout, loading, error, register }}
+      value={{ user, login, logout, loading, error, register, setUser }}
     >
       {children}
     </AuthContext.Provider>

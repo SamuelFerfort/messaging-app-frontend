@@ -8,18 +8,22 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
     throw new Error("No authentication token found");
   }
 
-  const defaultHeaders = {
-    "Content-Type": "application/json",
+  const isFormData = options.body instanceof FormData;
+  const headers = {
     Authorization: `Bearer ${token}`,
   };
+
+  if (!isFormData) {
+    headers["Content-Type"] = "application/json";
+  }
 
   const response = await fetch(`${API_URL}${endpoint}`, {
     ...options,
     headers: {
-      ...defaultHeaders,
+      ...headers,
       ...options.headers,
     },
-    body: options.body ? JSON.stringify(options.body) : undefined,
+    body: isFormData ? options.body : JSON.stringify(options.body),
   });
 
   if (!response.ok) {

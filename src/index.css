@@ -1,15 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@layer base {
+  body {
+    font-family: "Inter";
+  }
 }
 
+.chat {
+  background-image: url("./assets/background.jpg");
+}
 .body-text {
   font-size: 14px;
 }
@@ -25,5 +28,5 @@ body {
 
 .secondary-text {
   font-size: 13px;
-  color: #8696a0; 
+  color: #8696a0;
 }
