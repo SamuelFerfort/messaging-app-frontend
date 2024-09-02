@@ -5,6 +5,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import formatTimestampToHHMM from "../utils/formatMessageTime";
 import { SendHorizonal } from "lucide-react";
 import AvatarIcon from "./AvatarIcon";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 
 ChatWindow.propTypes = {
   chat: PropTypes.object,
@@ -14,7 +16,11 @@ ChatWindow.propTypes = {
 
 export default function ChatWindow({ chat, loading, error }) {
   const [newMessage, setNewMessage] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
+  const addEmoji = (emoji) => {
+    setNewMessage(newMessage + emoji.native);
+  };
   const queryClient = useQueryClient();
 
   const {
@@ -70,7 +76,11 @@ export default function ChatWindow({ chat, loading, error }) {
     <section className="max-w-full w-full flex flex-col">
       <header className="h-14 bg-gray-100 flex items-center p-3 gap-3">
         {chat.receiver[0].avatar ? (
-          <img src={chat.receiver[0].avatar} alt={chat.receiver[0].firstName} className="rounded-full w-10 h-10 bg-white" />
+          <img
+            src={chat.receiver[0].avatar}
+            alt={chat.receiver[0].firstName}
+            className="rounded-full w-10 h-10 bg-white"
+          />
         ) : (
           <AvatarIcon size={40} />
         )}{" "}
@@ -102,8 +112,15 @@ export default function ChatWindow({ chat, loading, error }) {
       <footer className="h-14 bg-gray-200 flex items-center p-3">
         <form
           onSubmit={handleSendMessage}
-          className="flex items-center gap-2 w-full"
+          className="flex items-center gap-2 w-full relative"
         >
+          <button
+            type="button"
+            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            className="text-xl"
+          >
+            😊
+          </button>
           <input
             type="text"
             placeholder="Type a message"
@@ -114,6 +131,11 @@ export default function ChatWindow({ chat, loading, error }) {
           <button>
             <SendHorizonal className="h-8 w-8 text-gray-600" />
           </button>
+          {showEmojiPicker && (
+            <div className="absolute bottom-full">
+              <Picker data={data} onEmojiSelect={addEmoji} />
+            </div>
+          )}
         </form>
       </footer>
     </section>
