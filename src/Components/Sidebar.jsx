@@ -8,9 +8,14 @@ import AvatarIcon from "./AvatarIcon";
 Sidebar.propTypes = {
   handleChatStart: PropTypes.func,
   setActiveChat: PropTypes.func,
+  activeChat: PropTypes.object,
 };
 
-export default function Sidebar({ handleChatStart, setActiveChat, activeChat }) {
+export default function Sidebar({
+  handleChatStart,
+  setActiveChat,
+  activeChat,
+}) {
   const [activeTab, setActiveTabs] = useState("chats");
 
   const [filter, setFilter] = useState("");
@@ -46,7 +51,7 @@ export default function Sidebar({ handleChatStart, setActiveChat, activeChat }) 
 
     const filteredItems = filterItems(items, filter, activeTab);
 
-    console.log(filteredItems)
+    console.log(filteredItems);
     if (activeTab === "chats") {
       return (
         <div>
@@ -55,7 +60,7 @@ export default function Sidebar({ handleChatStart, setActiveChat, activeChat }) 
               <button
                 onClick={() => setActiveChat(chat)}
                 key={chat.id}
-                className="flex items-center p-2 hover:bg-gray-100 gap-2 w-full"
+                className={`flex items-center p-2 hover:bg-gray-100 gap-2 w-full ${activeChat?.id === chat.id ? "bg-gray-100" : "" }`} 
               >
                 {chat.receiver[0].avatar ? (
                   <img
@@ -64,7 +69,7 @@ export default function Sidebar({ handleChatStart, setActiveChat, activeChat }) 
                     className="rounded-full w-8 h-8 bg-white"
                   />
                 ) : (
-                  <AvatarIcon size={32}/>
+                  <AvatarIcon size={32} />
                 )}{" "}
                 {chat.name}
               </button>
@@ -80,7 +85,9 @@ export default function Sidebar({ handleChatStart, setActiveChat, activeChat }) 
           {filteredItems && filteredItems.length > 0 ? (
             filteredItems.map((user) => (
               <button
-                onClick={() => handleChatStart(user.id)}
+                onClick={() => {handleChatStart(user.id)
+                  setActiveTabs("chats")
+                }}
                 key={user.id}
                 className="flex items-center p-2 gap-2 hover:bg-gray-100 w-full"
               >
@@ -91,7 +98,7 @@ export default function Sidebar({ handleChatStart, setActiveChat, activeChat }) 
                     className="rounded-full w-8 h-8 bg-white"
                   />
                 ) : (
-                  <AvatarIcon size={32}/>
+                  <AvatarIcon size={32} />
                 )}{" "}
                 {user.firstName + " " + user.lastName}
               </button>
