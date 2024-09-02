@@ -14,13 +14,12 @@ export const authenticatedFetch = async (endpoint, options = {}) => {
   };
 
   const response = await fetch(`${API_URL}${endpoint}`, {
-    method: options.method || "GET",
+    ...options,
     headers: {
       ...defaultHeaders,
       ...options.headers,
     },
     body: options.body ? JSON.stringify(options.body) : undefined,
-    ...options,
   });
 
   if (!response.ok) {

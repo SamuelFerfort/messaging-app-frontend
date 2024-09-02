@@ -15,16 +15,17 @@ export default function Chats() {
 
   async function handleChatStart(otherUserId) {
     setIsChatLoading(true);
-
     try {
-      const chat = await authenticatedFetch("/api/chat/create", {
+      const chat = await authenticatedFetch("/api/chats/create", {
         method: "POST",
         body: { otherUserId },
       });
+      
 
       setActiveChat(chat);
     } catch (error) {
       console.error("Failed to start chat:", error);
+      
       setNewChatError(error);
     } finally {
       setIsChatLoading(false);
@@ -63,7 +64,7 @@ export default function Chats() {
           </nav>
           <section className="flex-grow overflow-y-auto p-4">
             {activeTab === "chats" && (
-              <ChatSidebar handleUserClick={handleChatStart} />
+              <ChatSidebar handleChatStart={handleChatStart} />
             )}
             {activeTab === "settings" && <Settings />}
             {activeTab === "profile" && <Profile />}

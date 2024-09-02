@@ -2,7 +2,7 @@ import { createContext, useState, useEffect, useContext } from "react";
 import { jwtDecode } from "jwt-decode";
 import PropTypes from "prop-types";
 const API_URL = import.meta.env.VITE_API_URL;
-const TOKEN_NAME = import.meta.env.VITE_TOKEN_NAME
+const TOKEN_NAME = import.meta.env.VITE_TOKEN_NAME;
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
@@ -13,10 +13,15 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkLoggedIn = () => {
       const token = localStorage.getItem(TOKEN_NAME);
+
       if (token) {
         try {
           const decoded = jwtDecode(token);
-          setUser({ id: decoded.id, name: decoded.name });
+          if (decoded.exp * 1000 > Date.now()) {
+            setUser({ id: decoded.id, name: decoded.name });
+          } else {
+            localStorage.removeItem(TOKEN_NAME);
+          }
         } catch (err) {
           console.error("Invalid token", err);
           localStorage.removeItem(TOKEN_NAME);
