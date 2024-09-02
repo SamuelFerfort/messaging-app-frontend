@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthProvider";
-import ChatSidebar from "../Components/ChatSidebar";
+import Sidebar from "../Components/Sidebar";
 import Profile from "../Components/Profile";
 import Settings from "../Components/Settings";
 import { authenticatedFetch } from "../utils/api";
@@ -13,6 +13,8 @@ export default function Chats() {
   const [isChatLoading, setIsChatLoading] = useState(null);
   const [newChatError, setNewChatError] = useState(null);
 
+ 
+
   async function handleChatStart(otherUserId) {
     setIsChatLoading(true);
     try {
@@ -20,7 +22,7 @@ export default function Chats() {
         method: "POST",
         body: { otherUserId },
       });
-      
+
 
       setActiveChat(chat);
     } catch (error) {
@@ -64,14 +66,14 @@ export default function Chats() {
           </nav>
           <section className="flex-grow overflow-y-auto p-4">
             {activeTab === "chats" && (
-              <ChatSidebar handleChatStart={handleChatStart} />
+              <Sidebar handleChatStart={handleChatStart} setActiveChat={setActiveChat} />
             )}
             {activeTab === "settings" && <Settings />}
             {activeTab === "profile" && <Profile />}
           </section>
         </aside>
         <ChatWindow
-          activeChat={activeChat}
+          chat={activeChat}
           loading={isChatLoading}
           error={newChatError}
         />

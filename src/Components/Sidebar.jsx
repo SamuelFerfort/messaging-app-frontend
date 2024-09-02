@@ -4,11 +4,12 @@ import { useState } from "react";
 import filterItems from "../utils/filterItems";
 import PropTypes from "prop-types";
 
-ChatSidebar.propTypes = {
+Sidebar.propTypes = {
   handleChatStart: PropTypes.func,
+  setActiveChat: PropTypes.func,
 };
 
-export default function ChatSidebar({ handleChatStart }) {
+export default function Sidebar({ handleChatStart, setActiveChat }) {
   const [activeTab, setActiveTabs] = useState("chats");
 
   const [filter, setFilter] = useState("");
@@ -49,12 +50,13 @@ export default function ChatSidebar({ handleChatStart }) {
         <div>
           {filteredItems && filteredItems.length > 0 ? (
             filteredItems.map((chat) => (
-              <div
+              <button
+                onClick={() => setActiveChat(chat)}
                 key={chat.id}
                 className="flex items-center p-2 hover:bg-gray-100"
               >
                 👤 {chat.name || `Chat ${chat.id}`}
-              </div>
+              </button>
             ))
           ) : (
             <div>No chats found!</div>
