@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { authenticatedFetch } from "../utils/api";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { SendHorizonal, Image as ImageIcon, X } from "lucide-react";
 import AvatarIcon from "./AvatarIcon";
@@ -22,6 +22,12 @@ export default function ChatWindow({ chat, loading, error }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
 
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const addEmoji = (emoji) => {
     setNewMessage(newMessage + emoji.native);
     setShowEmojiPicker(false);
@@ -38,6 +44,9 @@ export default function ChatWindow({ chat, loading, error }) {
     enabled: !!chat?.id,
   });
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
   useTitle(chat?.name || "Chat");
 
   const sendMessageMutation = useMutation({
@@ -57,9 +66,9 @@ export default function ChatWindow({ chat, loading, error }) {
 
   async function handleSendMessage(e) {
     e.preventDefault();
-    if(newMessage.length > 70) {
-      setNewMessage("Bro thats too long")
-      return
+    if (newMessage.length > 70) {
+      setNewMessage("Bro thats too long");
+      return;
     }
     if ((!newMessage.trim() && !selectedImage) || !chat) return;
 
@@ -86,7 +95,7 @@ export default function ChatWindow({ chat, loading, error }) {
   const handleImageSelect = (e) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedImage(e.target.files[0]);
-      setNewMessage(""); 
+      setNewMessage("");
     }
   };
 
@@ -96,17 +105,17 @@ export default function ChatWindow({ chat, loading, error }) {
 
   const removeSelectedImage = () => {
     setSelectedImage(null);
-    fileInputRef.current.value = null; 
+    fileInputRef.current.value = null;
   };
 
   if (loading) return <div>Loading chat...</div>;
 
   if (error) return <div>Error: {error.message}</div>;
 
-  if (!chat) return <section className="w-full h-full no-chat"> </section>
+  if (!chat) return <section className="w-full h-full chat"> </section>;
 
   return (
-    <section className="max-w-full w-full flex flex-col">
+    <section className="max-w-full w-full flex h-full flex-col overflow-y-auto">
       <header className="h-14 bg-gray-100 flex items-center p-3 gap-3">
         {chat.receiver[0].avatar ? (
           <img
@@ -121,15 +130,21 @@ export default function ChatWindow({ chat, loading, error }) {
           <span>
             {chat.receiver[0].firstName + " " + chat.receiver[0].lastName}
           </span>
-          <span className="text-sm text-gray-500">{truncateAbout(chat.receiver[0].about)}</span>
+          <span className="text-sm text-gray-500">
+            {truncateAbout(chat.receiver[0].about)}
+          </span>
         </div>
       </header>
-      <MessagesWindow
-        messages={messages}
-        messagesLoading={messagesLoading}
-        messagesError={messagesError}
-        chat={chat}
-      />
+
+      <div className="flex-grow overflow-y-auto chat">
+        <MessagesWindow
+          messages={messages}
+          messagesLoading={messagesLoading}
+          messagesError={messagesError}
+          chat={chat}
+        />
+        <div ref={messagesEndRef} />
+      </div>
 
       <footer className="h-14 bg-gray-200 flex items-center p-3">
         <form

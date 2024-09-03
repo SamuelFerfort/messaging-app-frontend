@@ -6,3 +6,5 @@ export default function formatTimestampToHHMM(timestamp) {
   
     return `${hours}:${minutes}`;
   }
+
+

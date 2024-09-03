@@ -18,8 +18,6 @@ export default function Sidebar({
   setActiveChat,
   activeChat,
 }) {
- 
-
   const [activeTab, setActiveTabs] = useState("chats");
 
   const [filter, setFilter] = useState("");

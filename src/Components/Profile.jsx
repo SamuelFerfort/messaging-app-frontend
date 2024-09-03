@@ -11,8 +11,7 @@ export default function Profile() {
   const [about, setAbout] = useState(user.about || "");
   const [isEditing, setIsEditing] = useState(false);
 
-
-    useTitle("Profile")
+  useTitle("Profile");
 
   async function handleAvatarSubmit(e) {
     e.preventDefault();
@@ -38,7 +37,7 @@ export default function Profile() {
         headers: {
           "Content-Type": "application/json",
         },
-        body:{ about },
+        body: { about },
       });
 
       if (result.success) {
@@ -51,7 +50,7 @@ export default function Profile() {
   }
   return (
     <section className="bg-gray-100 h-full">
-      <h1 className="font-bold text-xl pl-2 h-14 p-4">Profile</h1>
+      <h1 className="font-bold text-xl h-14 p-4 bg-white mb-4 shadow-sm">Profile</h1>
       <div className="w-full">
         <div className="mx-auto w-full flex justify-center">
           {user.avatar ? (
@@ -80,11 +79,11 @@ export default function Profile() {
         </form>
       </div>
 
-      <div className="mt-5 h-15 p bg-white p-4 shadow-lg">
+      <div className="mt-5 h-15 p bg-white p-4 shadow-sm">
         <h1 className="text-green-400">Name</h1>
         <p>{user.name}</p>
       </div>
-      <div className="mt-4 bg-white p-4 shadow-lg">
+      <div className="mt-4 bg-white p-4 shadow-sm">
         <div className="flex flex-col">
           <label htmlFor="about" className="text-green-400 text-base mb-2">
             About
