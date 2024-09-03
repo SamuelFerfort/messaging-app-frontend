@@ -57,6 +57,10 @@ export default function ChatWindow({ chat, loading, error }) {
 
   async function handleSendMessage(e) {
     e.preventDefault();
+    if(newMessage.length > 70) {
+      setNewMessage("Bro thats too long")
+      return
+    }
     if ((!newMessage.trim() && !selectedImage) || !chat) return;
 
     const formData = new FormData();
@@ -82,7 +86,7 @@ export default function ChatWindow({ chat, loading, error }) {
   const handleImageSelect = (e) => {
     if (e.target.files && e.target.files[0]) {
       setSelectedImage(e.target.files[0]);
-      setNewMessage(""); // Clear text message when image is selected
+      setNewMessage(""); 
     }
   };
 
@@ -92,7 +96,7 @@ export default function ChatWindow({ chat, loading, error }) {
 
   const removeSelectedImage = () => {
     setSelectedImage(null);
-    fileInputRef.current.value = null; // Reset file input
+    fileInputRef.current.value = null; 
   };
 
   if (loading) return <div>Loading chat...</div>;
