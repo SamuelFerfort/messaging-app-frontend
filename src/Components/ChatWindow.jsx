@@ -8,6 +8,7 @@ import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 import useTitle from "../hooks/useTitle";
 import MessagesWindow from "./MessageWindow";
+import { truncateAbout } from "../utils/truncate";
 
 ChatWindow.propTypes = {
   chat: PropTypes.object,
@@ -98,7 +99,7 @@ export default function ChatWindow({ chat, loading, error }) {
 
   if (error) return <div>Error: {error.message}</div>;
 
-  if (!chat) return <div>Select a chat to start chatting</div>;
+  if (!chat) return <section className="w-full h-full no-chat"> </section>
 
   return (
     <section className="max-w-full w-full flex flex-col">
@@ -112,7 +113,12 @@ export default function ChatWindow({ chat, loading, error }) {
         ) : (
           <AvatarIcon size={40} />
         )}{" "}
-        {chat.receiver[0].firstName + " " + chat.receiver[0].lastName}
+        <div className="flex flex-col flex-start">
+          <span>
+            {chat.receiver[0].firstName + " " + chat.receiver[0].lastName}
+          </span>
+          <span className="text-sm text-gray-500">{truncateAbout(chat.receiver[0].about)}</span>
+        </div>
       </header>
       <MessagesWindow
         messages={messages}
@@ -135,14 +141,13 @@ export default function ChatWindow({ chat, loading, error }) {
             😊
           </button>
           <button
-              type="button"
-              onClick={handleImageClick}
-              disabled={!!selectedImage}
-            >
-              <ImageIcon className="h-6 w-6 text-gray-600" />
-            </button>
+            type="button"
+            onClick={handleImageClick}
+            disabled={!!selectedImage}
+          >
+            <ImageIcon className="h-6 w-6 text-gray-600" />
+          </button>
           <div className="relative flex-grow">
-           
             <input
               type="text"
               placeholder={selectedImage ? "Send image..." : "Type a message"}

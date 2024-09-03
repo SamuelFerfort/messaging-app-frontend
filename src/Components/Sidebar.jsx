@@ -5,6 +5,8 @@ import filterItems from "../utils/filterItems";
 import PropTypes from "prop-types";
 import { Search } from "lucide-react";
 import AvatarIcon from "./AvatarIcon";
+import { truncateMessage } from "../utils/truncate";
+
 Sidebar.propTypes = {
   handleChatStart: PropTypes.func,
   setActiveChat: PropTypes.func,
@@ -16,6 +18,8 @@ export default function Sidebar({
   setActiveChat,
   activeChat,
 }) {
+ 
+
   const [activeTab, setActiveTabs] = useState("chats");
 
   const [filter, setFilter] = useState("");
@@ -54,24 +58,33 @@ export default function Sidebar({
     console.log(filteredItems);
     if (activeTab === "chats") {
       return (
-        <div>
+        <div className="overflow-x-hidden">
           {filteredItems && filteredItems.length > 0 ? (
             filteredItems.map((chat) => (
               <button
                 onClick={() => setActiveChat(chat)}
                 key={chat.id}
-                className={`flex items-center p-2 hover:bg-gray-100 gap-2 w-full ${activeChat?.id === chat.id ? "bg-gray-100" : "" }`} 
+                className={`flex items-center p-2 hover:bg-gray-100 gap-2 w-full ${
+                  activeChat?.id === chat.id ? "bg-gray-100" : ""
+                }`}
               >
                 {chat.receiver[0].avatar ? (
-                  <img
-                    src={chat.receiver[0].avatar}
-                    alt={chat.name}
-                    className="rounded-full w-8 h-8 bg-white"
-                  />
+                  <div>
+                    <img
+                      src={chat.receiver[0].avatar}
+                      alt={chat.name}
+                      className="rounded-full w-10 min-h-10 bg-white"
+                    />
+                  </div>
                 ) : (
-                  <AvatarIcon size={32} />
+                  <AvatarIcon size={40} />
                 )}{" "}
-                {chat.name}
+                <div className="flex flex-col items-start">
+                  <span className="text-lg">{chat.name} </span>
+                  <span className="text-xs text-gray-500 overflow-x-hidden">
+                    {truncateMessage(chat.lastMessage?.content)}
+                  </span>
+                </div>
               </button>
             ))
           ) : (
@@ -85,8 +98,9 @@ export default function Sidebar({
           {filteredItems && filteredItems.length > 0 ? (
             filteredItems.map((user) => (
               <button
-                onClick={() => {handleChatStart(user.id)
-                  setActiveTabs("chats")
+                onClick={() => {
+                  handleChatStart(user.id);
+                  setActiveTabs("chats");
                 }}
                 key={user.id}
                 className="flex items-center p-2 gap-2 hover:bg-gray-100 w-full"
