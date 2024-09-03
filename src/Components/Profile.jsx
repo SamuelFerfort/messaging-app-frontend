@@ -3,12 +3,16 @@ import AvatarIcon from "./AvatarIcon";
 import { authenticatedFetch } from "../utils/api";
 import { useState } from "react";
 import { Edit2, Check } from "lucide-react";
+import useTitle from "../hooks/useTitle";
 
 export default function Profile() {
   const { user, setUser } = useAuth();
   const [selectedFile, setSelectedFile] = useState(null);
   const [about, setAbout] = useState(user.about || "");
   const [isEditing, setIsEditing] = useState(false);
+
+
+    useTitle("Profile")
 
   async function handleAvatarSubmit(e) {
     e.preventDefault();
@@ -45,7 +49,6 @@ export default function Profile() {
       console.error("Failed to update about:", error);
     }
   }
-  console.log(user)
   return (
     <section className="bg-gray-100 h-full">
       <h1 className="font-bold text-xl pl-2 h-14 p-4">Profile</h1>
@@ -61,7 +64,7 @@ export default function Profile() {
             <AvatarIcon size={192} />
           )}
         </div>
-        <form onSubmit={handleAvatarSubmit} className="p-4">
+        <form onSubmit={handleAvatarSubmit} className="mt-2">
           <input
             className="text-sm mt-2"
             type="file"
@@ -77,11 +80,11 @@ export default function Profile() {
         </form>
       </div>
 
-      <div className="mt-5 h-15 p bg-white p-4">
+      <div className="mt-5 h-15 p bg-white p-4 shadow-lg">
         <h1 className="text-green-400">Name</h1>
         <p>{user.name}</p>
       </div>
-      <div className="mt-4 bg-white p-4">
+      <div className="mt-4 bg-white p-4 shadow-lg">
         <div className="flex flex-col">
           <label htmlFor="about" className="text-green-400 text-base mb-2">
             About

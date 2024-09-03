@@ -5,6 +5,7 @@ import Profile from "../Components/Profile";
 import { authenticatedFetch } from "../utils/api";
 import ChatWindow from "../Components/ChatWindow";
 import { MessageCircle, User, LogOut } from "lucide-react";
+import useTitle from "../hooks/useTitle";
 
 export default function Chats() {
   const { logout } = useAuth();
@@ -30,11 +31,14 @@ export default function Chats() {
       setIsChatLoading(false);
     }
   }
+
+  useTitle("Chats");
+
   return (
     <main className="flex h-screen justify-center items-center py-5 px-28 bg-green-300">
       <div className="w-full h-full flex">
         <aside className=" bg-gray-100 flex max-w-sm w-full">
-          <nav className="flex flex-col  min-w-14 items-center py-4 gap-5">
+          <nav className="flex flex-col  min-w-14 items-center py-4 gap-5 border-r border-r-gray-100">
             <button
               onClick={() => setActiveTab("chats")}
               className={` p-2 rounded-full ${
