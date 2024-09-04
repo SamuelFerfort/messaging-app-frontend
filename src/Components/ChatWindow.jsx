@@ -191,7 +191,6 @@ export default function ChatWindow({ chat, loading, error }) {
               onChange={(e) => !selectedImage && setNewMessage(e.target.value)}
               className="outline-none px-4 py-2 h-9 w-full text-gray-500 pr-10"
               readOnly={!!selectedImage}
-              disabled={sendingMessage}
             />
             {selectedImage && (
               <button
@@ -211,7 +210,7 @@ export default function ChatWindow({ chat, loading, error }) {
             accept="image/*"
             className="hidden"
           />
-          <button type="submit">
+          <button type="submit" disabled={sendingMessage}>
             {sendingMessage ? (
               <Loading />
             ) : (

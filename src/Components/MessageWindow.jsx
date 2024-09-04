@@ -15,7 +15,7 @@ const MessagesWindow = ({ messages, messagesLoading, messagesError }) => {
     return <div>Error loading messages {messagesError.message}</div>;
 
   return (
-    <main className="flex-grow flex flex-col px-8 py-5 overflow-y-auto chat justify-end ">
+    <main className="flex-grow flex flex-col px-8 py-5 chat">
       {messages.map((m) => (
         <div
           key={m.id}
