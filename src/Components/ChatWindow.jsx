@@ -13,6 +13,8 @@ import { useAuth } from "../contexts/AuthProvider";
 import GroupAvatar from "./GroupAvatar";
 import Loading from "./Loading";
 
+
+
 ChatWindow.propTypes = {
   chat: PropTypes.object,
   loading: PropTypes.bool,
@@ -25,8 +27,8 @@ export default function ChatWindow({ chat, loading, error }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
   const [sendingMessage, setIsSendingMessage] = useState(null);
+  const [imgError, setImgError] = useState(null)
   const messagesEndRef = useRef(null);
-
   const { user } = useAuth();
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -62,9 +64,11 @@ export default function ChatWindow({ chat, loading, error }) {
     onSuccess: () => {
       queryClient.invalidateQueries(["messages", chat.id]);
       queryClient.invalidateQueries(["chats"]);
+      setImgError(null)
     },
     onError: (error) => {
-      console.error("Error sending message:", error);
+      setImgError(error.message)
+      setSelectedImage(null)
     },
   });
 
@@ -103,6 +107,7 @@ export default function ChatWindow({ chat, loading, error }) {
     if (e.target.files && e.target.files[0]) {
       setSelectedImage(e.target.files[0]);
       setNewMessage("");
+      setImgError(null)
     }
   };
 
@@ -125,7 +130,6 @@ export default function ChatWindow({ chat, loading, error }) {
 
   if (!chat) return <section className="w-full h-full chat"> </section>;
 
-  console.log(chat);
   return (
     <section className="max-w-full w-full flex h-full flex-col overflow-y-auto">
       <header className="h-14 bg-gray-100 flex items-center p-3 gap-3">
@@ -189,9 +193,11 @@ export default function ChatWindow({ chat, loading, error }) {
               placeholder={selectedImage ? "Send image..." : "Type a message"}
               value={selectedImage ? selectedImage.name : newMessage}
               onChange={(e) => !selectedImage && setNewMessage(e.target.value)}
-              className="outline-none px-4 py-2 h-9 w-full text-gray-500 pr-10"
+              className="outline-none px-4 py-2 h-9 w-full text-gray-500 pr-10 relative"
               readOnly={!!selectedImage}
             />
+            {imgError && <span className="text-red-400 text-xs italic absolute bottom-6 left-5">Max size is 5MB</span>}
+
             {selectedImage && (
               <button
                 type="button"
