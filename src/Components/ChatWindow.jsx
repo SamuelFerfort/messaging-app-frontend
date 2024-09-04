@@ -11,6 +11,7 @@ import MessagesWindow from "./MessageWindow";
 import { truncateAbout } from "../utils/truncate";
 import { useAuth } from "../contexts/AuthProvider";
 import GroupAvatar from "./GroupAvatar";
+import Loading from "./Loading";
 
 ChatWindow.propTypes = {
   chat: PropTypes.object,
@@ -111,7 +112,11 @@ export default function ChatWindow({ chat, loading, error }) {
     fileInputRef.current.value = null;
   };
 
-  if (loading) return <div>Loading chat...</div>;
+  if (loading) {
+   <section className="max-w-full w-full flex h-full flex-col overflow-y-auto">
+    <Loading  size={50}/>
+   </section>
+  };
 
   if (error) return <div>Error: {error.message}</div>;
 
