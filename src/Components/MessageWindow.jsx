@@ -12,7 +12,7 @@ const MessagesWindow = ({ messages, messagesLoading, messagesError }) => {
 
  
   return (
-    <main className="flex-grow flex flex-col px-8 py-5 overflow-y-auto chat justify-end">
+    <main className="flex-grow flex flex-col px-8 py-5 overflow-y-auto chat justify-end ">
       {messages.map((m) => (
         <div key={m.id} className={`flex  items-center gap-1 ${
             m.senderId === user.id

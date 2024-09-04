@@ -67,66 +67,69 @@ export default function SignUp() {
   return (
     <main className="flex  justify-center items-center bg-gray-900  min-h-screen  bg-gradient-to-r from-green-300 via-green-500 to-green-700">
       <form
-        className=" max-w-md bg-gray-800 p-8 rounded-lg h-full"
+             className="bg-white shadow-green-600 shadow-lg rounded px-8 pt-6 pb-8 mb-4 max-w-md w-full"
         method="post"
         onSubmit={handleSubmit}
       >
-        <h1 className="text-2xl font-bold mb-6 text-gray-100">Sign Up</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">Sign Up</h1>
 
         <div className="mb-4 flex gap-10">
           <div className="w-1/2">
-            <label htmlFor="firstName" className="block text-gray-300">
+            <label htmlFor="firstName" className="block font-bold text-sm">
               First name
             </label>
             <input
               type="text"
               name="firstName"
               id="firstName"
+              placeholder="Bob"
               onChange={handleChange}
               value={formData.firstName}
-              className="w-full p-2 mt-2 border border-gray-700 rounded bg-gray-700 text-gray-100"
+               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
             {errors.firstName && (
-              <span className="text-red-400 text-sm">{errors.firstName}</span>
+              <span className="text-red-500 text-xs mb-2 italic">{errors.firstName}</span>
             )}
           </div>
           <div className="w-1/2">
-            <label htmlFor="lastName" className="block text-gray-300">
+            <label htmlFor="lastName" className="block font-bold text-sm">
               Last name
             </label>
             <input
               type="text"
               name="lastName"
               id="lastName"
+              placeholder="Ross"
               onChange={handleChange}
               value={formData.lastName}
-              className="w-full p-2 mt-2 border border-gray-700 rounded bg-gray-700 text-gray-100"
+               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
             {errors.lastName && (
-              <span className="text-red-400 text-sm">{errors.lastName}</span>
+              <span className="text-red-500 text-xs mb-2 italic">{errors.lastName}</span>
             )}
           </div>
         </div>
 
         <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-300">
+          <label htmlFor="email" className="block font-bold text-sm">
             Email
           </label>
           <input
             type="email"
+            placeholder="bob@ross.com"
             name="email"
             id="email"
             onChange={handleChange}
             value={formData.email}
-            className="w-full p-2 mt-2 border border-gray-700 rounded bg-gray-700 text-gray-100"
+             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
           {errors.email && (
-            <span className="text-red-400 text-sm">{errors.email}</span>
+            <span className="text-red-500 text-xs mb-2 italic">{errors.email}</span>
           )}
         </div>
 
         <div className="mb-4">
-          <label htmlFor="password" className="block text-gray-300">
+          <label htmlFor="password" className="block font-bold text-sm">
             Password
           </label>
           <input
@@ -135,15 +138,16 @@ export default function SignUp() {
             id="password"
             onChange={handleChange}
             value={formData.password}
-            className="w-full p-2 mt-2 border border-gray-700 rounded bg-gray-700  text-gray-100"
+            placeholder="**************"
+             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
           {errors.password && (
-            <span className="text-red-400 text-sm">{errors.password}</span>
+            <span className="text-red-500 text-xs mb-2 italic">{errors.password}</span>
           )}
         </div>
 
         {errors.general && (
-          <div className="text-red-400 text-sm mb-4">{errors.general}</div>
+          <div className="text-red-500 text-xs mb-2 italic ">{errors.general}</div>
         )}
 
         <div>
@@ -154,10 +158,10 @@ export default function SignUp() {
           />
         </div>
 
-        <p className="mt-4 text-gray-400">
+        <p className="mt-2">
           Already have an account?{" "}
-          <Link to="/login" className="text-green-500 hover:underline">
-            Log In
+          <Link to="/login" className="font-bold text-sm text-green-500 hover:text-green-700">
+            Log in
           </Link>
         </p>
       </form>

@@ -54,8 +54,8 @@ export default function Profile() {
   }
 
   return (
-    <section className="bg-gray-100 h-full">
-      <h1 className="font-bold text-xl h-14 p-4 bg-white mb-4 shadow-sm">
+    <section className="bg-white h-full">
+      <h1 className="font-bold text-xl h-14 p-4 bg-gray-300 mb-4 shadow-sm">
         Profile
       </h1>
       <div className="w-full">
@@ -80,24 +80,22 @@ export default function Profile() {
             accept="image/*"
             onChange={(e) => setSelectedFile(e.target.files[0])}
           />
-          <div className="w-3/4">
           <ActionButton
             loading={loading}
             idleText={"Change Avatar"}
             loadingText={"Changing Avatar...."}
           />
-          </div>
          
         </form>
       </div>
 
-      <div className="mt-5 h-15 p bg-white p-4 shadow-sm">
-        <h1 className="text-green-400">Name</h1>
+      <div className="mt-5 h-15 p bg-gray-200 p-4 shadow-sm">
+        <h1 className="text-green-500">Name</h1>
         <p>{user.name || `${user.firstName} ${user.lastName}`}</p>
       </div>
-      <div className="mt-4 bg-white p-4 shadow-sm">
+      <div className="mt-4 bg-gray-200 p-4 shadow-sm">
         <div className="flex flex-col">
-          <label htmlFor="about" className="text-green-400 text-base mb-2">
+          <label htmlFor="about" className="text-green-500 text-base mb-2">
             About
           </label>
           <div className="flex items-center">
@@ -108,19 +106,19 @@ export default function Profile() {
               value={about}
               onChange={(e) => setAbout(e.target.value)}
               placeholder="Write something about you..."
-              className="outline-none focus:border-b-green-400 focus:border-b-2 flex-grow mr-2 bg-white"
+              className="outline-none focus:border-b-green-500 focus:border-b-2 flex-grow mr-2 bg-gray-200"
               disabled={!isEditing}
             />
             {isEditing ? (
               <Check
                 size={20}
-                className="text-green-400 cursor-pointer"
+                className="text-green-500 cursor-pointer"
                 onClick={handleAboutSubmit}
               />
             ) : (
               <Edit2
                 size={20}
-                className="text-gray-400 cursor-pointer"
+                className="text-gray-500 cursor-pointer"
                 onClick={() => setIsEditing(true)}
               />
             )}

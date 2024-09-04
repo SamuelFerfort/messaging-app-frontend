@@ -35,7 +35,7 @@ export default function Chats() {
   useTitle("Chats");
 
   return (
-    <main className="flex h-screen justify-center items-center py-5 px-28 bg-gradient-to-r rounded-sm from-green-200 via-green-400 to-green-600 shadow-2xl">
+    <main className="flex h-screen justify-center items-center py-5 px-28 bg-green-500 shadow-2xl">
       <div className="w-full h-full flex">
         <aside className=" bg-gray-100 flex max-w-sm w-full">
           <nav className="flex flex-col  min-w-14 items-center py-4 gap-5 border-r border-r-gray-100">

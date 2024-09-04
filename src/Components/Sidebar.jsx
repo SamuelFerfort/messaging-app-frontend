@@ -261,7 +261,7 @@ export default function Sidebar({
         <h1 className=" text-xl font-bold">Chats</h1>
         <button
           onClick={() => dialogRef.current?.showModal()}
-          className="bg-green-100 text-green-500 py-1 px-2 rounded-full hover:bg-green-200"
+          className=" bg-green-500 py-1 px-2 rounded-md hover:bg-green-600 text-white" 
         >
           Create Group
         </button>
@@ -279,33 +279,33 @@ export default function Sidebar({
         />
       </div>
 
-      <nav className="flex gap-2 py-2 px-1">
+      <nav className="flex gap-2 py-2 px-1 ">
         <button
           onClick={() => setActiveTabs("chats")}
-          className={` py-1 px-2 rounded-full ${
+          className={` py-1 px-2 rounded-md ${
             activeTab === "chats"
-              ? "bg-green-100 text-green-600 hover:bg-green-200"
-              : "bg-gray-200 text-gray-500 hover:bg-gray-300"
+              ? "bg-green-500 text-white hover:bg-green-600"
+              : "text-white bg-gray-500 hover:bg-gray-600"
           }`}
         >
           Chats
         </button>
         <button
           onClick={() => setActiveTabs("users")}
-          className={` py-1 px-2 rounded-full ${
+          className={` py-1 px-2 rounded-md ${
             activeTab === "users"
-              ? "bg-green-100 text-green-600 hover:bg-green-200"
-              : "bg-gray-200 text-gray-500 hover:bg-gray-300"
+              ?  "bg-green-500 text-white hover:bg-green-600"
+              : "text-white bg-gray-500 hover:bg-gray-600"
           }`}
         >
           Users
         </button>
         <button
           onClick={() => setActiveTabs("groups")}
-          className={` py-1 px-2 rounded-full ${
+          className={` py-1 px-2 rounded-md ${
             activeTab === "groups"
-              ? "bg-green-100 text-green-600 hover:bg-green-200"
-              : "bg-gray-200 text-gray-500 hover:bg-gray-300"
+              ?  "bg-green-500 text-white hover:bg-green-600"
+              : "text-white bg-gray-500 hover:bg-gray-600"
           }`}
         >
           Groups
