@@ -38,7 +38,14 @@ export default function Login() {
   }
 
   async function demo() {
-    const credentials = { email: "test@user.com", password: "12345678" };
+    const demoEmails = ["test@user.com", "test@user2.com", "test@user3.com"];
+
+    const randomDemoEmail =
+      demoEmails[Math.floor(Math.random() * demoEmails.length)];
+
+    setEmail(randomDemoEmail);
+    setPassword("12345678");
+    const credentials = { email: randomDemoEmail, password: "12345678" };
     try {
       await login(credentials);
       navigate("/chats", { replace: true });
