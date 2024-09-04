@@ -151,8 +151,11 @@ export default function Sidebar({
           {filteredItems && filteredItems.length > 0 ? (
             filteredItems.map((user) => (
               <button
-                onClick={() => {
-                  handleChatStart(user.id);
+                onClick={async () => {
+
+                  await handleChatStart(user.id);
+                  queryClient.invalidateQueries(["chats"]);
+
                   setActiveTabs("chats");
                 }}
                 key={user.id}
