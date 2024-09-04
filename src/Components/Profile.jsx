@@ -55,7 +55,7 @@ export default function Profile() {
 
   return (
     <section className="bg-white h-full">
-      <h1 className="font-bold text-xl h-14 p-4 bg-gray-300 mb-4 shadow-sm">
+      <h1 className="font-bold text-2xl h-14 p-4 bg-gray-300 mb-4 shadow-sm">
         Profile
       </h1>
       <div className="w-full">
@@ -80,11 +80,15 @@ export default function Profile() {
             accept="image/*"
             onChange={(e) => setSelectedFile(e.target.files[0])}
           />
+          <div
+            className="w-3/4 flex mx-auto">
+
           <ActionButton
             loading={loading}
             idleText={"Change Avatar"}
             loadingText={"Changing Avatar...."}
           />
+          </div>
          
         </form>
       </div>

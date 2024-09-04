@@ -246,7 +246,7 @@ export default function Sidebar({
               type="text"
               name="name"
               id="name"
-              className=" w-full border p-2 border-gray-200 rounded-md"
+              className=" w-full border p-2 border-gray-200 rounded-full"
             />
             {groupFormError.name && (
               <span className="text-red-400 italic text-xs pt-1">
@@ -270,10 +270,10 @@ export default function Sidebar({
       </dialog>
 
       <div className="flex items-center px-2 pb-5 justify-between">
-        <h1 className=" text-xl font-bold">Chats</h1>
+        <h1 className=" text-2xl font-bold">Chats</h1>
         <button
           onClick={() => dialogRef.current?.showModal()}
-          className=" bg-green-500 py-1 px-2 rounded-md hover:bg-green-600 text-white"
+          className=" bg-green-500 py-1 px-5 rounded-full hover:bg-green-600 text-white"
         >
           Create Group
         </button>
@@ -294,7 +294,7 @@ export default function Sidebar({
       <nav className="flex gap-2 py-2 px-1 ">
         <button
           onClick={() => setActiveTabs("chats")}
-          className={` py-1 px-2 rounded-md ${
+          className={` py-1 px-5 rounded-full ${
             activeTab === "chats"
               ? "bg-green-500 text-white hover:bg-green-600"
               : "text-white bg-gray-500 hover:bg-gray-600"
@@ -304,7 +304,7 @@ export default function Sidebar({
         </button>
         <button
           onClick={() => setActiveTabs("users")}
-          className={` py-1 px-2 rounded-md ${
+          className={` py-1 px-5 rounded-full ${
             activeTab === "users"
               ? "bg-green-500 text-white hover:bg-green-600"
               : "text-white bg-gray-500 hover:bg-gray-600"
@@ -314,7 +314,7 @@ export default function Sidebar({
         </button>
         <button
           onClick={() => setActiveTabs("groups")}
-          className={` py-1 px-2 rounded-md ${
+          className={` py-1 px-5 rounded-full ${
             activeTab === "groups"
               ? "bg-green-500 text-white hover:bg-green-600"
               : "text-white bg-gray-500 hover:bg-gray-600"
