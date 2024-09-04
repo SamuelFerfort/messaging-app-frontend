@@ -8,6 +8,7 @@ import AvatarIcon from "./AvatarIcon";
 import { truncateMessage } from "../utils/truncate";
 import UserSelect from "./UserSelect";
 import ActionButton from "./ActionButton";
+import Loading from "./Loading";
 
 Sidebar.propTypes = {
   handleChatStart: PropTypes.func,
@@ -97,13 +98,22 @@ export default function Sidebar({
     dialogRef.current.close();
   }
 
-  const isLoading = chatsLoading || usersLoading;
+   const isLoading = chatsLoading || usersLoading
   const error = chatsError || usersError;
 
-  if (isLoading) return <div>Loading...</div>;
+
   if (error) return <div>Error fetching data: {error.message}</div>;
 
   const renderContent = () => {
+      if(isLoading) {
+        return (
+          <div className="flex justify-center items-center mt-8">
+            <Loading />
+          </div>
+        );
+      
+      }
+ 
     const items =
       activeTab === "chats" || activeTab === "groups" ? chats : users;
     console.log("chats", chats);
@@ -152,7 +162,6 @@ export default function Sidebar({
             filteredItems.map((user) => (
               <button
                 onClick={async () => {
-
                   await handleChatStart(user.id);
                   queryClient.invalidateQueries(["chats"]);
 
@@ -264,7 +273,7 @@ export default function Sidebar({
         <h1 className=" text-xl font-bold">Chats</h1>
         <button
           onClick={() => dialogRef.current?.showModal()}
-          className=" bg-green-500 py-1 px-2 rounded-md hover:bg-green-600 text-white" 
+          className=" bg-green-500 py-1 px-2 rounded-md hover:bg-green-600 text-white"
         >
           Create Group
         </button>
@@ -297,7 +306,7 @@ export default function Sidebar({
           onClick={() => setActiveTabs("users")}
           className={` py-1 px-2 rounded-md ${
             activeTab === "users"
-              ?  "bg-green-500 text-white hover:bg-green-600"
+              ? "bg-green-500 text-white hover:bg-green-600"
               : "text-white bg-gray-500 hover:bg-gray-600"
           }`}
         >
@@ -307,7 +316,7 @@ export default function Sidebar({
           onClick={() => setActiveTabs("groups")}
           className={` py-1 px-2 rounded-md ${
             activeTab === "groups"
-              ?  "bg-green-500 text-white hover:bg-green-600"
+              ? "bg-green-500 text-white hover:bg-green-600"
               : "text-white bg-gray-500 hover:bg-gray-600"
           }`}
         >
@@ -315,7 +324,7 @@ export default function Sidebar({
         </button>
       </nav>
 
-      {renderContent()}
+      { renderContent()}
     </section>
   );
 }

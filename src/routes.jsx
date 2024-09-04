@@ -4,6 +4,7 @@ import SignUp from "./Pages/SignUp";
 import Chats from "./Pages/Chats";
 import ProtectedRoute from "./Components/ProtectedRoute";
 import PublicRoute from "./Components/PublicRoute";
+import Error from "./Components/Error"; // Import the new Error component
 
 const router = createBrowserRouter([
   {
@@ -35,8 +36,12 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/error",
+    element: <Error statusCode={500} message="Internal Server Error" />,
+  },
+  {
     path: "*",
-    element: <Navigate to="/login" replace />,
+    element: <Error />, 
   },
 ]);
 
