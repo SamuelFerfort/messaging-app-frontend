@@ -10,6 +10,7 @@ import useTitle from "../hooks/useTitle";
 import MessagesWindow from "./MessageWindow";
 import { truncateAbout } from "../utils/truncate";
 import { useAuth } from "../contexts/AuthProvider";
+import GroupAvatar from "./GroupAvatar";
 
 ChatWindow.propTypes = {
   chat: PropTypes.object,
@@ -25,7 +26,7 @@ export default function ChatWindow({ chat, loading, error }) {
 
   const messagesEndRef = useRef(null);
 
-  const {user} = useAuth()
+  const { user } = useAuth();
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -116,13 +117,13 @@ export default function ChatWindow({ chat, loading, error }) {
 
   if (!chat) return <section className="w-full h-full chat"> </section>;
 
-
-
-  console.log(chat)
+  console.log(chat);
   return (
     <section className="max-w-full w-full flex h-full flex-col overflow-y-auto">
       <header className="h-14 bg-gray-100 flex items-center p-3 gap-3">
-        {chat.receiver[0].avatar ? (
+        {chat.isGroup ? (
+          <GroupAvatar members={chat.receiver} />
+        ) : chat.receiver[0].avatar ? (
           <img
             src={chat.receiver[0].avatar}
             alt={chat.receiver[0].firstName}
@@ -137,11 +138,10 @@ export default function ChatWindow({ chat, loading, error }) {
               ? chat.name
               : chat.receiver[0].firstName + " " + chat.receiver[0].lastName}
           </span>
-        
-            <span className="text-sm text-gray-500">
-              {truncateAbout(chat, user)}
-            </span>
-        
+
+          <span className="text-sm text-gray-500">
+            {truncateAbout(chat, user)}
+          </span>
         </div>
       </header>
 
