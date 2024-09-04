@@ -38,7 +38,12 @@ export default function Login() {
   }
 
   async function demo() {
-    const demoEmails = ["test@user.com", "test@user2.com", "test@user3.com"];
+    const demoEmails = [
+      "test@user.com",
+      "test@user2.com",
+      "test@user3.com",
+      "test@user4.com",
+    ];
 
     const randomDemoEmail =
       demoEmails[Math.floor(Math.random() * demoEmails.length)];
