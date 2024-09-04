@@ -80,11 +80,14 @@ export default function Profile() {
             accept="image/*"
             onChange={(e) => setSelectedFile(e.target.files[0])}
           />
+          <div className="w-3/4">
           <ActionButton
             loading={loading}
             idleText={"Change Avatar"}
             loadingText={"Changing Avatar...."}
           />
+          </div>
+         
         </form>
       </div>
 
