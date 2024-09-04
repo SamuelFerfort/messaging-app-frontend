@@ -24,7 +24,7 @@ export default function ChatWindow({ chat, loading, error }) {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
-
+  const [sendingMessage, setIsSendingMessage] = useState(null);
   const messagesEndRef = useRef(null);
 
   const { user } = useAuth();
@@ -86,6 +86,7 @@ export default function ChatWindow({ chat, loading, error }) {
       formData.append("content", newMessage);
     }
 
+    setIsSendingMessage(true);
     try {
       await sendMessageMutation.mutateAsync(formData);
 
@@ -93,6 +94,8 @@ export default function ChatWindow({ chat, loading, error }) {
       setSelectedImage(null);
     } catch (err) {
       console.error("Error sending message:", err);
+    } finally {
+      setIsSendingMessage(false);
     }
   }
 
@@ -113,10 +116,10 @@ export default function ChatWindow({ chat, loading, error }) {
   };
 
   if (loading) {
-   <section className="max-w-full w-full flex h-full flex-col overflow-y-auto">
-    <Loading  size={50}/>
-   </section>
-  };
+    <section className="max-w-full w-full flex h-full flex-col overflow-y-auto">
+      <Loading size={50} />
+    </section>;
+  }
 
   if (error) return <div>Error: {error.message}</div>;
 
@@ -188,6 +191,7 @@ export default function ChatWindow({ chat, loading, error }) {
               onChange={(e) => !selectedImage && setNewMessage(e.target.value)}
               className="outline-none px-4 py-2 h-9 w-full text-gray-500 pr-10"
               readOnly={!!selectedImage}
+              disabled={sendingMessage}
             />
             {selectedImage && (
               <button
@@ -208,7 +212,11 @@ export default function ChatWindow({ chat, loading, error }) {
             className="hidden"
           />
           <button type="submit">
-            <SendHorizonal className="h-8 w-8 text-gray-600" />
+            {sendingMessage ? (
+              <Loading />
+            ) : (
+              <SendHorizonal className="h-8 w-8 text-gray-600" />
+            )}
           </button>
           {showEmojiPicker && !selectedImage && (
             <div className="absolute bottom-full">
