@@ -14,18 +14,17 @@
 .chat {
   background-image: url("./assets/background.jpg");
 }
-
+body {
+  background-color: #c9c6c0;
+}
 
 .login {
   background-image: url("./assets/background.svg");
-  
 }
 
 .body-text {
   font-size: 14px;
 }
-
-
 
 .chat-message {
   font-size: 15px;
