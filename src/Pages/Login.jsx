@@ -118,6 +118,8 @@ export default function Login() {
 
             <button
               onClick={demo}
+              type="button"
+              disabled={loading}
               className=" w-full mt-2 className={`w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed `}"
             >
               Try demo account
