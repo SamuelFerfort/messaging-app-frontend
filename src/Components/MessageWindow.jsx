@@ -3,7 +3,7 @@ import formatTimestampToHHMM from "../utils/formatMessageTime";
 import { useAuth } from "../contexts/AuthProvider";
 import AvatarIcon from "./AvatarIcon";
 
-const MessagesWindow = ({ messages, messagesLoading, messagesError, chat }) => {
+const MessagesWindow = ({ messages, messagesLoading, messagesError }) => {
   const { user } = useAuth();
 
   if (messagesLoading) return <div>Loading messages...</div>;
@@ -64,7 +64,6 @@ const MessagesWindow = ({ messages, messagesLoading, messagesError, chat }) => {
 MessagesWindow.propTypes = {
   messagesLoading: PropTypes.bool,
   messagesError: PropTypes.object,
-  chat: PropTypes.object,
   messages: PropTypes.array,
 };
 

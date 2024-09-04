@@ -4,19 +4,21 @@ import { authenticatedFetch } from "../utils/api";
 import { useState } from "react";
 import { Edit2, Check } from "lucide-react";
 import useTitle from "../hooks/useTitle";
+import ActionButton from "./ActionButton";
 
 export default function Profile() {
-  const { user, setUser } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [selectedFile, setSelectedFile] = useState(null);
   const [about, setAbout] = useState(user.about || "");
   const [isEditing, setIsEditing] = useState(false);
-  console.log("User object:", user);
+  const [loading, setLoading] = useState(null);
 
   useTitle("Profile");
 
   async function handleAvatarSubmit(e) {
     e.preventDefault();
     if (!selectedFile) return;
+    setLoading(true);
 
     const formData = new FormData();
     formData.append("avatar", selectedFile);
@@ -25,9 +27,10 @@ export default function Profile() {
       method: "POST",
       body: formData,
     });
+    setLoading(false);
 
     if (result.success) {
-      setUser({ ...user, avatar: result.user.avatar });
+      refreshUser();
     }
   }
 
@@ -42,7 +45,7 @@ export default function Profile() {
       });
 
       if (result.success) {
-        setUser({ ...user, about });
+        refreshUser();
         setIsEditing(false);
       }
     } catch (error) {
@@ -50,9 +53,6 @@ export default function Profile() {
     }
   }
 
-
-
-  
   return (
     <section className="bg-gray-100 h-full">
       <h1 className="font-bold text-xl h-14 p-4 bg-white mb-4 shadow-sm">
@@ -63,32 +63,34 @@ export default function Profile() {
           {user.avatar ? (
             <img
               src={user.avatar}
-              alt={user.name}
+              alt={user.firstName}
               className="w-48 h-48 rounded-full object-cover"
             />
           ) : (
             <AvatarIcon size={192} />
           )}
         </div>
-        <form onSubmit={handleAvatarSubmit} className="mt-2">
+        <form
+          onSubmit={handleAvatarSubmit}
+          className="mt-2 flex flex-col gap-4"
+        >
           <input
             className="text-sm mt-2"
             type="file"
             accept="image/*"
             onChange={(e) => setSelectedFile(e.target.files[0])}
           />
-          <button
-            type="submit"
-            className="mt-2 bg-green-400 text-white px-4 py-2 rounded"
-          >
-            Change avatar
-          </button>
+          <ActionButton
+            loading={loading}
+            idleText={"Change Avatar"}
+            loadingText={"Changing Avatar...."}
+          />
         </form>
       </div>
 
       <div className="mt-5 h-15 p bg-white p-4 shadow-sm">
         <h1 className="text-green-400">Name</h1>
-        <p>{user.name}</p>
+        <p>{user.name || `${user.firstName} ${user.lastName}`}</p>
       </div>
       <div className="mt-4 bg-white p-4 shadow-sm">
         <div className="flex flex-col">

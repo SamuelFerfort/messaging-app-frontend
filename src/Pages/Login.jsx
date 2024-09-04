@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
 import { validateLoginForm } from "../utils/loginValidation";
 import useTitle from "../hooks/useTitle";
+import ActionButton from "../Components/ActionButton";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -83,14 +84,11 @@ export default function Login() {
           {error.general && (
             <div className="text-red-500 text-sm mb-4">{error.general}</div>
           )}
-          {loading && <div className="text-gray-500 mb-4">Loading...</div>}
           <div className="flex flex-col items-center justify-between">
-            <button
-              className="bg-green-500 w-full hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none transition duration-300 focus:shadow-outline"
-              type="submit"
-            >
-              Sign In
-            </button>
+           <ActionButton loading={loading} 
+           loadingText={"Logging in..."}
+           idleText={"Log in"}
+            />
             <div className="mt-2">
               No account?{" "}
               <Link

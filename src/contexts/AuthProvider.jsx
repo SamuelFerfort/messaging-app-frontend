@@ -10,26 +10,37 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const checkLoggedIn = () => {
-      const token = localStorage.getItem(TOKEN_NAME);
+  const fetchUser = async (userId) => {
+    try {
+      const response = await fetch(`${API_URL}/api/auth/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(TOKEN_NAME)}`,
+        },
+      });
 
-      if (token) {
-        try {
-          const decoded = jwtDecode(token);
-          if (decoded.exp * 1000 > Date.now()) {
-            setUser({ id: decoded.id, name: decoded.name });
-          } else {
-            localStorage.removeItem(TOKEN_NAME);
-          }
-        } catch (err) {
-          console.error("Invalid token", err);
-          localStorage.removeItem(TOKEN_NAME);
-        }
+      if (!response.ok) {
+        throw new Error("Failed to fetch user data");
       }
-    };
 
-    checkLoggedIn();
+      const userData = await response.json();
+      setUser(userData);
+    } catch (err) {
+      console.error("Error fetching user data:", err);
+      setUser(null);
+      localStorage.removeItem(TOKEN_NAME);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const token = localStorage.getItem(TOKEN_NAME);
+    if (token) {
+      const decoded = jwtDecode(token);
+      fetchUser(decoded.id);
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   const register = async (formData) => {
@@ -80,12 +91,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem(TOKEN_NAME, token);
 
       const decoded = jwtDecode(token);
-      setUser({
-        id: decoded.id,
-        name: decoded.name,
-        avatar: decoded.avatar,
-        about: decoded.about,
-      });
+      await fetchUser(decoded.id);
     } catch (err) {
       console.error("Login error", err);
       setError(err.message);
@@ -99,9 +105,18 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem(TOKEN_NAME);
   };
 
+  const refreshUser = async () => {
+    const token = localStorage.getItem(TOKEN_NAME);
+    if (token) {
+      const decoded = jwtDecode(token);
+
+      await fetchUser(decoded.id);
+    }
+  };
+
   return (
     <AuthContext.Provider
-      value={{ user, login, logout, loading, error, register, setUser }}
+      value={{ user, login, logout, loading, error, register, refreshUser }}
     >
       {children}
     </AuthContext.Provider>

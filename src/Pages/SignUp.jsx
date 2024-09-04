@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../contexts/AuthProvider";
 import { Link, useNavigate } from "react-router-dom";
 import useTitle from "../hooks/useTitle";
+import ActionButton from "../Components/ActionButton";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
@@ -66,7 +67,7 @@ export default function SignUp() {
   return (
     <main className="flex  justify-center items-center bg-gray-900  min-h-screen  bg-gradient-to-r from-green-300 via-green-500 to-green-700">
       <form
-        className=" max-w-md bg-gray-800 p-8 rounded-lg h-full" 
+        className=" max-w-md bg-gray-800 p-8 rounded-lg h-full"
         method="post"
         onSubmit={handleSubmit}
       >
@@ -144,15 +145,13 @@ export default function SignUp() {
         {errors.general && (
           <div className="text-red-400 text-sm mb-4">{errors.general}</div>
         )}
-        {loading && <div className="text-gray-400 mb-4">Loading...</div>}
 
         <div>
-          <button
-            type="submit"
-            className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-700 transition duration-300"
-          >
-            Sign Up
-          </button>
+          <ActionButton
+            loading={loading}
+            loadingText={"Creating account..."}
+            idleText={"Sign up"}
+          />
         </div>
 
         <p className="mt-4 text-gray-400">

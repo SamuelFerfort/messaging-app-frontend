@@ -7,6 +7,7 @@ import { Search } from "lucide-react";
 import AvatarIcon from "./AvatarIcon";
 import { truncateMessage } from "../utils/truncate";
 import UserSelect from "./UserSelect";
+import ActionButton from "./ActionButton";
 
 Sidebar.propTypes = {
   handleChatStart: PropTypes.func,
@@ -25,6 +26,7 @@ export default function Sidebar({
   const [nameError, setNameError] = useState("");
   const dialogRef = useRef(null);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const {
     isLoading: chatsLoading,
@@ -47,6 +49,7 @@ export default function Sidebar({
 
   async function handleGroupChatSubmit(e) {
     e.preventDefault();
+
     const name = e.target.name.value;
 
     if (!name) return setNameError("Name must not be empty");
@@ -54,10 +57,10 @@ export default function Sidebar({
     if (name.length > 30)
       return setNameError("Name must not be longer than 30 characters");
 
+    setLoading(true);
     setNameError("");
     const userIds = selectedUsers.map((u) => ({ id: u.id }));
 
-    console.log("userIds", userIds);
     const result = await authenticatedFetch("/api/chats/group", {
       body: {
         name,
@@ -71,6 +74,8 @@ export default function Sidebar({
     } else {
       setNameError(result.message);
     }
+    setLoading(false);
+    dialogRef.current.close();
   }
 
   const isLoading = chatsLoading || usersLoading;
@@ -80,11 +85,10 @@ export default function Sidebar({
   if (error) return <div>Error fetching data: {error.message}</div>;
 
   const renderContent = () => {
-    const items = activeTab === "chats" ? chats : users;
-
+    const items = activeTab === "chats" || activeTab === "groups" ? chats : users;
+    console.log("chats", chats);
     const filteredItems = filterItems(items, filter, activeTab);
 
-    console.log(filteredItems);
     if (activeTab === "chats") {
       return (
         <div className="overflow-x-hidden">
@@ -151,6 +155,46 @@ export default function Sidebar({
           )}
         </div>
       );
+    } else if (activeTab === "groups") {
+      console.log("filtered items", filteredItems);
+      const groups = filteredItems.filter((i) => i.isGroup);
+
+      console.log("groups", groups);
+      return (
+        <div className="overflow-x-hidden">
+          {groups && groups.length > 0 ? (
+            groups.map((chat) => (
+              <button
+                onClick={() => setActiveChat(chat)}
+                key={chat.id}
+                className={`flex items-center p-2 hover:bg-gray-100 gap-2 w-full border-b border-gray-300 ${
+                  activeChat?.id === chat.id ? "bg-gray-100" : ""
+                }`}
+              >
+                {chat.receiver[0].avatar ? (
+                  <div>
+                    <img
+                      src={chat.receiver[0].avatar}
+                      alt={chat.name}
+                      className="rounded-full w-10 h-10 object-cover bg-white"
+                    />
+                  </div>
+                ) : (
+                  <AvatarIcon size={40} />
+                )}{" "}
+                <div className="flex flex-col items-start">
+                  <span className="text-lg">{chat.name} </span>
+                  <span className="text-xs text-gray-500 overflow-x-hidden">
+                    {truncateMessage(chat.lastMessage?.content)}
+                  </span>
+                </div>
+              </button>
+            ))
+          ) : (
+            <div className="p-2">No groups found!</div>
+          )}
+        </div>
+      );
     }
   };
 
@@ -184,9 +228,11 @@ export default function Sidebar({
             setSelectedUsers={setSelectedUsers}
           />
 
-          <button className="bg-green-500 text-white h-10 rounded-md hover:bg-green-600">
-            Submit
-          </button>
+          <ActionButton
+            idleText={"Create group"}
+            loading={loading}
+            loadingText={"Creating group..."}
+          />
         </form>
       </dialog>
 
@@ -232,6 +278,16 @@ export default function Sidebar({
           }`}
         >
           Users
+        </button>
+        <button
+          onClick={() => setActiveTabs("groups")}
+          className={` py-1 px-2 rounded-full ${
+            activeTab === "groups"
+              ? "bg-green-100 text-green-600 hover:bg-green-200"
+              : "bg-gray-200 text-gray-500 hover:bg-gray-300"
+          }`}
+        >
+          Groups
         </button>
       </nav>
 
