@@ -1,13 +1,12 @@
+export function truncateAbout(chat, user, maxLength = 30) {
+  if (chat.isGroup) {
+    const userName = `, ${user.firstName} ${user.lastName}`;
 
-
-export function truncateAbout(chat, maxLength = 30) {
-
-   
-  if(chat.isGroup) {
-
-    return chat.receiver.map(u => `${u.firstName} ${u.lastName}` ).join(", ") 
-  }  
-
+    return (
+      chat.receiver.map((u) => `${u.firstName} ${u.lastName}`).join(", ") +
+      userName
+    );
+  }
 
   const about = chat.receiver[0].about;
   if (!about) return "No status update";

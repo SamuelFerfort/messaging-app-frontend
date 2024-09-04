@@ -2,7 +2,7 @@ import { useState } from "react";
 import { X } from "lucide-react";
 import PropTypes from "prop-types";
 
-const UserSelect = ({ allUsers, selectedUsers, setSelectedUsers }) => {
+const UserSelect = ({ allUsers, selectedUsers, setSelectedUsers, error}) => {
   const [inputValue, setInputValue] = useState("");
 
   console.log("all users", allUsers);
@@ -43,6 +43,7 @@ const UserSelect = ({ allUsers, selectedUsers, setSelectedUsers }) => {
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Type to search users..."
         />
+        {error && <span className="text-red-400 italic text-sm">{error}</span>}
         {inputValue && (
           <ul className="absolute z-50 w-full bg-white border rounded-md mt-1 max-h-60 overflow-y-auto shadow-lg">
             {filteredUsers.map((user) => (
@@ -81,6 +82,7 @@ UserSelect.propTypes = {
   selectedUsers: PropTypes.array,
   setSelectedUsers: PropTypes.func,
   allUsers: PropTypes.array,
+  error: PropTypes.string,
 };
 
 export default UserSelect;

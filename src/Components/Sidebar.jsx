@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { authenticatedFetch } from "../utils/api";
 import { useState, useRef } from "react";
 import filterItems from "../utils/filterItems";
@@ -21,12 +21,16 @@ export default function Sidebar({
   activeChat,
 }) {
   const [activeTab, setActiveTabs] = useState("chats");
-
   const [filter, setFilter] = useState("");
-  const [nameError, setNameError] = useState("");
+  const [groupFormError, setGroupFormError] = useState({
+    name: null,
+    users: null,
+  });
   const dialogRef = useRef(null);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const {
     isLoading: chatsLoading,
@@ -35,7 +39,6 @@ export default function Sidebar({
   } = useQuery({
     queryKey: ["chats"],
     queryFn: () => authenticatedFetch("/api/chats"),
-    enabled: activeTab === "chats",
   });
 
   const {
@@ -52,13 +55,27 @@ export default function Sidebar({
 
     const name = e.target.name.value;
 
-    if (!name) return setNameError("Name must not be empty");
+    if (!name)
+      return setGroupFormError((prev) => ({
+        ...prev,
+        name: "Name must not be empty",
+      }));
 
     if (name.length > 30)
-      return setNameError("Name must not be longer than 30 characters");
+      return setGroupFormError((prev) => ({
+        ...prev,
+        name: "Name must not be longer than 30 characters",
+      }));
+
+    if (selectedUsers.length <= 0)
+      return setGroupFormError((prev) => ({
+        ...prev,
+        users: "Select at least 1 other user",
+      }));
 
     setLoading(true);
-    setNameError("");
+    setGroupFormError({ users: null, name: null });
+
     const userIds = selectedUsers.map((u) => ({ id: u.id }));
 
     const result = await authenticatedFetch("/api/chats/group", {
@@ -70,9 +87,11 @@ export default function Sidebar({
     });
 
     if (result.success) {
+      queryClient.invalidateQueries(["chats"]);
       setActiveChat(result.group);
+      setActiveTabs("groups");
     } else {
-      setNameError(result.message);
+      setGroupFormError(result.message);
     }
     setLoading(false);
     dialogRef.current.close();
@@ -85,7 +104,8 @@ export default function Sidebar({
   if (error) return <div>Error fetching data: {error.message}</div>;
 
   const renderContent = () => {
-    const items = activeTab === "chats" || activeTab === "groups" ? chats : users;
+    const items =
+      activeTab === "chats" || activeTab === "groups" ? chats : users;
     console.log("chats", chats);
     const filteredItems = filterItems(items, filter, activeTab);
 
@@ -101,7 +121,7 @@ export default function Sidebar({
                   activeChat?.id === chat.id ? "bg-gray-100" : ""
                 }`}
               >
-                {chat.receiver[0].avatar ? (
+                {chat.receiver[0]?.avatar ? (
                   <div>
                     <img
                       src={chat.receiver[0].avatar}
@@ -216,9 +236,9 @@ export default function Sidebar({
               id="name"
               className=" w-full border p-2 border-gray-200 rounded-md"
             />
-            {nameError && (
+            {groupFormError.name && (
               <span className="text-red-400 italic text-xs pt-1">
-                {nameError}
+                {groupFormError.name}
               </span>
             )}
           </div>
@@ -226,6 +246,7 @@ export default function Sidebar({
             allUsers={users}
             selectedUsers={selectedUsers}
             setSelectedUsers={setSelectedUsers}
+            error={groupFormError.users}
           />
 
           <ActionButton
