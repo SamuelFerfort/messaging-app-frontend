@@ -64,9 +64,9 @@ export default function SignUp() {
     }
   };
   return (
-    <main className="flex  justify-center mt-36 bg-gray-900 ">
+    <main className="flex  justify-center items-center bg-gray-900  min-h-screen  bg-gradient-to-r from-green-300 via-green-500 to-green-700">
       <form
-        className=" max-w-md bg-gray-800 p-8 rounded-lg shadow-md"
+        className=" max-w-md bg-gray-800 p-8 rounded-lg h-full" 
         method="post"
         onSubmit={handleSubmit}
       >
@@ -149,7 +149,7 @@ export default function SignUp() {
         <div>
           <button
             type="submit"
-            className="w-full bg-purple-600 text-white p-2 rounded hover:bg-purple-700 transition duration-300"
+            className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-700 transition duration-300"
           >
             Sign Up
           </button>
@@ -157,7 +157,7 @@ export default function SignUp() {
 
         <p className="mt-4 text-gray-400">
           Already have an account?{" "}
-          <Link to="/login" className="text-purple-400 hover:underline">
+          <Link to="/login" className="text-green-500 hover:underline">
             Log In
           </Link>
         </p>

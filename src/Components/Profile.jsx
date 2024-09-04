@@ -10,6 +10,7 @@ export default function Profile() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [about, setAbout] = useState(user.about || "");
   const [isEditing, setIsEditing] = useState(false);
+  console.log("User object:", user);
 
   useTitle("Profile");
 
@@ -48,9 +49,15 @@ export default function Profile() {
       console.error("Failed to update about:", error);
     }
   }
+
+
+
+  
   return (
     <section className="bg-gray-100 h-full">
-      <h1 className="font-bold text-xl h-14 p-4 bg-white mb-4 shadow-sm">Profile</h1>
+      <h1 className="font-bold text-xl h-14 p-4 bg-white mb-4 shadow-sm">
+        Profile
+      </h1>
       <div className="w-full">
         <div className="mx-auto w-full flex justify-center">
           {user.avatar ? (

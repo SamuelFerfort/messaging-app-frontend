@@ -24,9 +24,8 @@ export default function Login() {
     const { isValid, errors } = validateLoginForm(email, password);
 
     if (!isValid) return setError((prev) => ({ ...prev, ...errors }));
-    const credentials = {email, password}
+    const credentials = { email, password };
     try {
-      
       await login(credentials);
       navigate("/chats", { replace: true });
     } catch (err) {
@@ -38,12 +37,17 @@ export default function Login() {
   }
 
   return (
-    <main className="flex justify-center items-center min-h-screen bg-gray-100">
+    <main className="flex justify-center items-center min-h-screen bg-gradient-to-r from-green-200 via-green-400 to-green-600 ">
       <div className="w-full max-w-md">
-        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">Log in</h1>
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white shadow-green-600 shadow-lg rounded px-8 pt-6 pb-8 mb-4"
+        >
+          <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
+            Log in
+          </h1>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+            <label className="block text-sm font-bold mb-2" htmlFor="email">
               Email
             </label>
             <input
@@ -58,8 +62,8 @@ export default function Login() {
               <p className="text-red-500 text-xs italic mt-1">Invalid Email</p>
             )}
           </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+          <div className="">
+            <label className="block text-sm font-bold mb-2" htmlFor="password">
               Password
             </label>
             <input
@@ -71,26 +75,31 @@ export default function Login() {
               placeholder="******************"
             />
             {error.password && (
-              <p className="text-red-500 text-xs italic">Password must be at least 6 characters</p>
+              <p className="text-red-500 text-xs mb-2 italic">
+                Password must be at least 6 characters
+              </p>
             )}
           </div>
           {error.general && (
             <div className="text-red-500 text-sm mb-4">{error.general}</div>
           )}
           {loading && <div className="text-gray-500 mb-4">Loading...</div>}
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col items-center justify-between">
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-green-500 w-full hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none transition duration-300 focus:shadow-outline"
               type="submit"
             >
               Sign In
             </button>
-            <Link
-              className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
-              to="/sign-up"
-            >
-              Sign up
-            </Link>
+            <div className="mt-2">
+              No account?{" "}
+              <Link
+                className="inline-block align-baseline font-bold text-sm text-green-500 hover:text-green-700"
+                to="/sign-up"
+              >
+                Sign up
+              </Link>
+            </div>
           </div>
         </form>
       </div>

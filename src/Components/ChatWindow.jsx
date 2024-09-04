@@ -114,6 +114,9 @@ export default function ChatWindow({ chat, loading, error }) {
 
   if (!chat) return <section className="w-full h-full chat"> </section>;
 
+
+
+  
   return (
     <section className="max-w-full w-full flex h-full flex-col overflow-y-auto">
       <header className="h-14 bg-gray-100 flex items-center p-3 gap-3">
@@ -121,18 +124,22 @@ export default function ChatWindow({ chat, loading, error }) {
           <img
             src={chat.receiver[0].avatar}
             alt={chat.receiver[0].firstName}
-            className="rounded-full w-10 h-10 bg-white"
+            className="rounded-full w-10 h-10 object-cover bg-white"
           />
         ) : (
           <AvatarIcon size={40} />
         )}{" "}
         <div className="flex flex-col flex-start">
           <span>
-            {chat.receiver[0].firstName + " " + chat.receiver[0].lastName}
+            {chat.isGroup
+              ? chat.name
+              : chat.receiver[0].firstName + " " + chat.receiver[0].lastName}
           </span>
-          <span className="text-sm text-gray-500">
-            {truncateAbout(chat.receiver[0].about)}
-          </span>
+        
+            <span className="text-sm text-gray-500">
+              {truncateAbout(chat)}
+            </span>
+        
         </div>
       </header>
 
