@@ -104,7 +104,12 @@ export default function Login() {
               idleText={"Log in"}
             />
 
-              <button onClick={demo} className=" w-full mt-2 className={`w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed `}">Try demo user</button>
+            <button
+              onClick={demo}
+              className=" w-full mt-2 className={`w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed `}"
+            >
+              Try demo account
+            </button>
             <div className="mt-2">
               No account?{" "}
               <Link
