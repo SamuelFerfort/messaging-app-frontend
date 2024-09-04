@@ -37,6 +37,19 @@ export default function Login() {
     }
   }
 
+  async function demo() {
+    const credentials = { email: "test@user.com", password: "12345678" };
+    try {
+      await login(credentials);
+      navigate("/chats", { replace: true });
+    } catch (err) {
+      setError((prev) => ({
+        ...prev,
+        general: err.message || "Failed to log in. Please try again.",
+      }));
+    }
+  }
+
   return (
     <main className="flex justify-center items-center min-h-screen bg-gradient-to-r from-green-200 via-green-400 to-green-600 ">
       <div className="w-full max-w-md">
@@ -85,10 +98,13 @@ export default function Login() {
             <div className="text-red-500 text-sm mb-4">{error.general}</div>
           )}
           <div className="flex flex-col items-center justify-between">
-           <ActionButton loading={loading} 
-           loadingText={"Logging in..."}
-           idleText={"Log in"}
+            <ActionButton
+              loading={loading}
+              loadingText={"Logging in..."}
+              idleText={"Log in"}
             />
+
+              <button onClick={demo} className=" w-full mt-2 className={`w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed `}">Try demo user</button>
             <div className="mt-2">
               No account?{" "}
               <Link
