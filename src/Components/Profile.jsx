@@ -28,9 +28,11 @@ export default function Profile() {
       body: formData,
     });
     setLoading(false);
-
+    
     if (result.success) {
       refreshUser();
+      e.target.elements.avatar.value = null
+      setSelectedFile(null)
     }
   }
 
@@ -77,6 +79,7 @@ export default function Profile() {
           <input
             className="text-sm mt-2"
             type="file"
+            name="avatar"
             accept="image/*"
             onChange={(e) => setSelectedFile(e.target.files[0])}
           />

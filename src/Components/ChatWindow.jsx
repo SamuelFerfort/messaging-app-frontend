@@ -12,7 +12,7 @@ import { truncateAbout } from "../utils/truncate";
 import { useAuth } from "../contexts/AuthProvider";
 import GroupAvatar from "./GroupAvatar";
 import Loading from "./Loading";
-
+import { io } from "socket.io-client";
 
 
 ChatWindow.propTypes = {
@@ -33,12 +33,36 @@ export default function ChatWindow({ chat, loading, error }) {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+  const [socket, setSocket] = useState(null);
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (chat?.id) {
+      const newSocket = io('http://your-backend-url');
+      setSocket(newSocket);
+
+      newSocket.emit('join chat', chat.id);
+
+      newSocket.on('new message', (message) => {
+        queryClient.setQueryData(['messages', chat.id], (oldData) => {
+          return oldData ? [...oldData, message] : [message];
+        });
+      });
+
+      return () => {
+        newSocket.emit('leave chat', chat.id);
+        newSocket.disconnect();
+      };
+    }
+  }, [chat?.id, queryClient]);
+
+
 
   const addEmoji = (emoji) => {
     setNewMessage(newMessage + emoji.native);
     setShowEmojiPicker(false);
   };
-  const queryClient = useQueryClient();
 
   const {
     error: messagesError,

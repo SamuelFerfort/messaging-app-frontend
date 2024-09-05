@@ -35,11 +35,11 @@ export default function Chats() {
   useTitle("Chats");
 
   return (
-    <main className="flex h-screen justify-center items-center py-5 px-28  shadow-2xl">
+    <main className="flex h-screen justify-center items-center xl:py-5 xl:px-28  shadow-2xl">
       <div className="w-full h-full flex">
       <div className="bg-green-500 h-12 z-10"/>
 
-        <aside className=" bg-gray-100 flex max-w-sm w-full">
+        <aside className=" bg-gray-100 flex max-w-sm w-full ">
           <nav className="flex flex-col  min-w-14 items-center py-4 gap-5 border-r border-r-gray-100">
             <button
               onClick={() => setActiveTab("chats")}

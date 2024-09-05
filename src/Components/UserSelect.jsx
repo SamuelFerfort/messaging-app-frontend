@@ -30,9 +30,9 @@ const UserSelect = ({ allUsers, selectedUsers, setSelectedUsers, error}) => {
     <div className="w-full max-w-md ">
       <label
         htmlFor="user-select"
-        className="block text-sm font-medium text-gray-700 mb-1"
+        className="block text-base font-medium text-gray-700 mb-1"
       >
-        Select Users
+        Add Users
       </label>
       <div className="relative">
         <input
@@ -43,7 +43,7 @@ const UserSelect = ({ allUsers, selectedUsers, setSelectedUsers, error}) => {
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Type to search users..."
         />
-        {error && <span className="text-red-400 italic text-sm">{error}</span>}
+        {error && <span className="text-red-400 italic text-xs">{error}</span>}
         {inputValue && (
           <ul className="absolute z-50 w-full bg-white border rounded-md mt-1 max-h-60 overflow-y-auto shadow-lg">
             {filteredUsers.map((user) => (

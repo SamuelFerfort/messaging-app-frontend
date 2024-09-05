@@ -232,21 +232,20 @@ export default function Sidebar({
 
   return (
     <section className="p-4 ">
-      <dialog ref={dialogRef} className="p-8 overflow-y-visible">
+      <dialog ref={dialogRef} className="p-12 overflow-y-visible border border-gray-400 rounded-md">
         <form
           onSubmit={handleGroupChatSubmit}
           className="flex flex-col gap-3  w-80  "
         >
-          <h1 className="text-xl">Create group chat</h1>
           <div className="flex flex-col">
-            <label htmlFor="name" className=" text-gray-700">
+            <label htmlFor="name" className="block text-base font-medium text-gray-700 mb-1 ">
               Name
             </label>
             <input
               type="text"
               name="name"
               id="name"
-              className=" w-full border p-2 border-gray-200 rounded-full"
+              className=" w-full border p-2 border-gray-200 rounded-md"
             />
             {groupFormError.name && (
               <span className="text-red-400 italic text-xs pt-1">

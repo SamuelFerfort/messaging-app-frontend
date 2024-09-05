@@ -11,6 +11,10 @@
   }
 }
 
+.lightgray {
+  background-color: #202c33;
+}
+
 .chat {
   background-image: url("./assets/background.jpg");
 }

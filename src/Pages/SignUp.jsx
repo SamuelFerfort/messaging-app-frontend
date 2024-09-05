@@ -158,9 +158,9 @@ export default function SignUp() {
           />
         </div>
 
-        <p className="mt-2">
+        <p className="mt-2 text-center">
           Already have an account?{" "}
-          <Link to="/login" className="font-bold text-sm text-green-500 hover:text-green-700">
+          <Link to="/login" className="font-bold text-sm  text-green-500 hover:text-green-700">
             Log in
           </Link>
         </p>
