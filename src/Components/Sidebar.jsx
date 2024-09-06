@@ -194,7 +194,7 @@ export default function Sidebar({
         <div className="flex flex-col items-start">
           <span className="text-lg">{chat.name} </span>
           <span className="text-xs text-gray-500 overflow-x-hidden">
-            {truncateMessage(chat.lastMessage?.content)}
+            {truncateMessage(chat.lastMessage?.content, 30)}
           </span>
         </div>
       </button>
