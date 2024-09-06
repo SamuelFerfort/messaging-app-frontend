@@ -67,7 +67,7 @@ export default function Login() {
       <div className="w-full max-w-md">
         <form
           onSubmit={handleSubmit}
-          className="bg-white shadow-green-600 shadow-lg rounded px-8 pt-6 pb-8 mb-4"
+          className="bg-white  rounded px-8 pt-6 pb-8 mb-4"
         >
           <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
             Log in
