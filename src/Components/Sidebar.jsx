@@ -162,14 +162,12 @@ export default function Sidebar({
 
     const items =
       activeTab === "chats" || activeTab === "groups" ? chats : users;
-    console.log("chats", chats);
     const filteredItems = filterItems(items, filter, activeTab);
 
     const renderChatOrGroupItem = (chat) => (
       <button
         onClick={() => {
           setActiveChat(chat);
-          // Clear notifications for this chat when it becomes active
           setNotifications((prev) => ({ ...prev, [chat.id]: 0 }));
         }}
         key={chat.id}
@@ -203,11 +201,10 @@ export default function Sidebar({
     );
 
     if (activeTab === "chats") {
-      const individualChats = filteredItems.filter((chat) => !chat.isGroup);
       return (
         <div className="overflow-x-hidden">
-          {individualChats && individualChats.length > 0 ? (
-            individualChats.map(renderChatOrGroupItem)
+          {filteredItems && filteredItems.length > 0 ? (
+            filteredItems.map(renderChatOrGroupItem)
           ) : (
             <div className="p-2">No chats found!</div>
           )}

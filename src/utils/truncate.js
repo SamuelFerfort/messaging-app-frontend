@@ -2,9 +2,10 @@ export function truncateAbout(chat, user, maxLength = 30) {
   if (chat.isGroup) {
     const userName = `, ${user.firstName} ${user.lastName}`;
 
-    return (
+    return truncateMessage(
       chat.receiver.map((u) => `${u.firstName} ${u.lastName}`).join(", ") +
-      userName
+        userName,
+      350
     );
   }
 
@@ -16,7 +17,7 @@ export function truncateAbout(chat, user, maxLength = 30) {
     : about;
 }
 
-export function truncateMessage(message, maxLength = 30) {
+export function truncateMessage(message, maxLength = 150) {
   if (!message) return "Send your first message";
   if (message.startsWith("http") && message.includes("cloudinary")) {
     return "Sent an image";
