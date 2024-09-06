@@ -16,7 +16,7 @@ const MessagesWindow = ({ messages, messagesLoading, messagesError }) => {
 
   return (
     <main className="flex-grow flex flex-col px-8 py-5 chat">
-      {messages.map((m) => (
+      {messages?.map((m) => (
         <div
           key={m.id}
           className={`flex  items-center gap-1 ${

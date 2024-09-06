@@ -13,7 +13,8 @@ import { useAuth } from "../contexts/AuthProvider";
 import GroupAvatar from "./GroupAvatar";
 import Loading from "./Loading";
 import { io } from "socket.io-client";
-
+const API_URL = import.meta.env.VITE_API_URL;
+const TOKEN_NAME = import.meta.env.VITE_TOKEN_NAME;
 
 ChatWindow.propTypes = {
   chat: PropTypes.object,
@@ -27,42 +28,52 @@ export default function ChatWindow({ chat, loading, error }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
   const [sendingMessage, setIsSendingMessage] = useState(null);
-  const [imgError, setImgError] = useState(null)
+  const [imgError, setImgError] = useState(null);
   const messagesEndRef = useRef(null);
   const { user } = useAuth();
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
-  const [socket, setSocket] = useState(null);
 
   const queryClient = useQueryClient();
 
+  const socketRef = useRef(null);
+
   useEffect(() => {
     if (chat?.id) {
-      const newSocket = io('http://your-backend-url');
-      setSocket(newSocket);
+      const token = localStorage.getItem(TOKEN_NAME);
 
-      newSocket.emit('join chat', chat.id);
+      socketRef.current = io(API_URL, {
+        auth: {
+          token: token,
+        },
+      });
 
-      newSocket.on('new message', (message) => {
-        queryClient.setQueryData(['messages', chat.id], (oldData) => {
+      socketRef.current.on("connect", () => {
+        console.log("Connected to server");
+        socketRef.current.emit("join chat", chat.id);
+      });
+
+      socketRef.current.on("connect_error", (err) => {
+        console.error("Socket connection error:", err);
+      });
+
+      socketRef.current.on("new message", (message) => {
+        queryClient.invalidateQueries(["chats"]);
+
+        queryClient.setQueryData(["messages", chat.id], (oldData) => {
           return oldData ? [...oldData, message] : [message];
         });
       });
 
       return () => {
-        newSocket.emit('leave chat', chat.id);
-        newSocket.disconnect();
+        if (socketRef.current) {
+          socketRef.current.emit("leave chat", chat.id);
+          socketRef.current.disconnect();
+        }
       };
     }
   }, [chat?.id, queryClient]);
-
-
-
-  const addEmoji = (emoji) => {
-    setNewMessage(newMessage + emoji.native);
-    setShowEmojiPicker(false);
-  };
 
   const {
     error: messagesError,
@@ -85,14 +96,10 @@ export default function ChatWindow({ chat, loading, error }) {
         method: "POST",
         body: messageData,
       }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["messages", chat.id]);
-      queryClient.invalidateQueries(["chats"]);
-      setImgError(null)
-    },
+
     onError: (error) => {
-      setImgError(error.message)
-      setSelectedImage(null)
+      setImgError(error.message);
+      setSelectedImage(null);
     },
   });
 
@@ -120,6 +127,7 @@ export default function ChatWindow({ chat, loading, error }) {
 
       setNewMessage("");
       setSelectedImage(null);
+      setImgError(null);
     } catch (err) {
       console.error("Error sending message:", err);
     } finally {
@@ -131,7 +139,7 @@ export default function ChatWindow({ chat, loading, error }) {
     if (e.target.files && e.target.files[0]) {
       setSelectedImage(e.target.files[0]);
       setNewMessage("");
-      setImgError(null)
+      setImgError(null);
     }
   };
 
@@ -220,7 +228,11 @@ export default function ChatWindow({ chat, loading, error }) {
               className="outline-none px-4 py-2 h-9 w-full text-gray-500 pr-10 relative"
               readOnly={!!selectedImage}
             />
-            {imgError && <span className="text-red-400 text-xs italic absolute bottom-6 left-5">Max size is 5MB</span>}
+            {imgError && (
+              <span className="text-red-400 text-xs italic absolute bottom-6 left-5">
+                Max size is 5MB
+              </span>
+            )}
 
             {selectedImage && (
               <button

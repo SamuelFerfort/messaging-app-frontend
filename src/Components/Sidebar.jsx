@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { authenticatedFetch } from "../utils/api";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import filterItems from "../utils/filterItems";
 import PropTypes from "prop-types";
 import { Search } from "lucide-react";
@@ -9,6 +9,9 @@ import { truncateMessage } from "../utils/truncate";
 import UserSelect from "./UserSelect";
 import ActionButton from "./ActionButton";
 import Loading from "./Loading";
+const API_URL = import.meta.env.VITE_API_URL;
+const TOKEN_NAME = import.meta.env.VITE_TOKEN_NAME;
+import { io } from "socket.io-client";
 
 Sidebar.propTypes = {
   handleChatStart: PropTypes.func,
@@ -27,10 +30,13 @@ export default function Sidebar({
     name: null,
     users: null,
   });
-  const dialogRef = useRef(null);
+
+  const [notifications, setNotifications] = useState({});
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const dialogRef = useRef(null);
+  const socketRef = useRef(null);
   const queryClient = useQueryClient();
 
   const {
@@ -50,6 +56,51 @@ export default function Sidebar({
     queryKey: ["users"],
     queryFn: () => authenticatedFetch("/api/users"),
   });
+
+  useEffect(() => {
+    const token = localStorage.getItem(TOKEN_NAME);
+    socketRef.current = io(API_URL, {
+      auth: { token },
+    });
+
+    socketRef.current.on("new message notification", ({ chatId, message }) => {
+      console.log("Received new message notification:", { chatId, message });
+
+      if (activeChat.id === chatId) return;
+
+      console.log(activeChat === chatId);
+      setNotifications((prev) => {
+        const newNotifications = {
+          ...prev,
+          [chatId]: (prev[chatId] || 0) + 1,
+        };
+        console.log("Updated notifications:", newNotifications);
+        return newNotifications;
+      });
+
+      queryClient.setQueryData(["chats"], (oldData) => {
+        if (!oldData) return oldData;
+        const newData = oldData.map((chat) =>
+          chat.id === chatId ? { ...chat, lastMessage: message } : chat
+        );
+        console.log("Updated chat data:", newData);
+        return newData;
+      });
+    });
+
+    socketRef.current.on("connect", () => {
+      console.log("Socket connected with ID:", socketRef.current.id);
+    });
+
+    socketRef.current.on("disconnect", () => {
+      console.log("Socket notification disconnected");
+    });
+
+    return () => {
+      console.log("Cleaning up socket notification connection");
+      socketRef.current.disconnect();
+    };
+  }, [queryClient, activeChat]);
 
   async function handleGroupChatSubmit(e) {
     e.preventDefault();
@@ -98,58 +149,68 @@ export default function Sidebar({
     dialogRef.current.close();
   }
 
-   const isLoading = chatsLoading || usersLoading
+  const isLoading = chatsLoading || usersLoading;
   const error = chatsError || usersError;
-
 
   if (error) return <div>Error fetching data: {error.message}</div>;
 
   const renderContent = () => {
-      if(isLoading) {
-        return (
-          <div className="flex justify-center items-center mt-8">
-            <Loading />
-          </div>
-        );
-      
-      }
- 
+    if (isLoading) {
+      return (
+        <div className="flex justify-center items-center mt-8">
+          <Loading />
+        </div>
+      );
+    }
+
     const items =
       activeTab === "chats" || activeTab === "groups" ? chats : users;
     console.log("chats", chats);
     const filteredItems = filterItems(items, filter, activeTab);
 
+    const renderChatOrGroupItem = (chat) => (
+      <button
+        onClick={() => {
+          setActiveChat(chat);
+          // Clear notifications for this chat when it becomes active
+          setNotifications((prev) => ({ ...prev, [chat.id]: 0 }));
+        }}
+        key={chat.id}
+        className={`flex items-center p-2 hover:bg-gray-100 gap-2 w-full border-b border-gray-300 ${
+          activeChat?.id === chat.id ? "bg-gray-100" : ""
+        }`}
+      >
+        <div className="relative">
+          {chat.receiver[0]?.avatar ? (
+            <img
+              src={chat.receiver[0].avatar}
+              alt={chat.name}
+              className="rounded-full w-10 h-10 object-cover bg-white"
+            />
+          ) : (
+            <AvatarIcon size={40} />
+          )}
+          {notifications[chat.id] > 0 && (
+            <span className="absolute -top-1 -right-1 bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+              {notifications[chat.id]}
+            </span>
+          )}
+        </div>
+        <div className="flex flex-col items-start">
+          <span className="text-lg">{chat.name} </span>
+          <span className="text-xs text-gray-500 overflow-x-hidden">
+            {truncateMessage(chat.lastMessage?.content)}
+          </span>
+        </div>
+      </button>
+    );
+
     if (activeTab === "chats") {
+      const individualChats = filteredItems.filter((chat) => !chat.isGroup);
       return (
         <div className="overflow-x-hidden">
-          {filteredItems && filteredItems.length > 0 ? (
-            filteredItems.map((chat) => (
-              <button
-                onClick={() => setActiveChat(chat)}
-                key={chat.id}
-                className={`flex items-center p-2 hover:bg-gray-100 gap-2 w-full border-b border-gray-300 ${
-                  activeChat?.id === chat.id ? "bg-gray-100" : ""
-                }`}
-              >
-                {chat.receiver[0]?.avatar ? (
-                  <div>
-                    <img
-                      src={chat.receiver[0].avatar}
-                      alt={chat.name}
-                      className="rounded-full w-10 h-10 object-cover bg-white"
-                    />
-                  </div>
-                ) : (
-                  <AvatarIcon size={40} />
-                )}{" "}
-                <div className="flex flex-col items-start">
-                  <span className="text-lg">{chat.name} </span>
-                  <span className="text-xs text-gray-500 overflow-x-hidden">
-                    {truncateMessage(chat.lastMessage?.content)}
-                  </span>
-                </div>
-              </button>
-            ))
+          {individualChats && individualChats.length > 0 ? (
+            individualChats.map(renderChatOrGroupItem)
           ) : (
             <div className="p-2">No chats found!</div>
           )}
@@ -188,40 +249,11 @@ export default function Sidebar({
         </div>
       );
     } else if (activeTab === "groups") {
-      console.log("filtered items", filteredItems);
-      const groups = filteredItems.filter((i) => i.isGroup);
-
-      console.log("groups", groups);
+      const groups = filteredItems.filter((chat) => chat.isGroup);
       return (
         <div className="overflow-x-hidden">
           {groups && groups.length > 0 ? (
-            groups.map((chat) => (
-              <button
-                onClick={() => setActiveChat(chat)}
-                key={chat.id}
-                className={`flex items-center p-2 hover:bg-gray-100 gap-2 w-full border-b border-gray-300 ${
-                  activeChat?.id === chat.id ? "bg-gray-100" : ""
-                }`}
-              >
-                {chat.receiver[0].avatar ? (
-                  <div>
-                    <img
-                      src={chat.receiver[0].avatar}
-                      alt={chat.name}
-                      className="rounded-full w-10 h-10 object-cover bg-white"
-                    />
-                  </div>
-                ) : (
-                  <AvatarIcon size={40} />
-                )}{" "}
-                <div className="flex flex-col items-start">
-                  <span className="text-lg">{chat.name} </span>
-                  <span className="text-xs text-gray-500 overflow-x-hidden">
-                    {truncateMessage(chat.lastMessage?.content)}
-                  </span>
-                </div>
-              </button>
-            ))
+            groups.map(renderChatOrGroupItem)
           ) : (
             <div className="p-2">No groups found!</div>
           )}
@@ -232,13 +264,19 @@ export default function Sidebar({
 
   return (
     <section className="p-4 ">
-      <dialog ref={dialogRef} className="p-12 overflow-y-visible border border-gray-400 rounded-md">
+      <dialog
+        ref={dialogRef}
+        className="p-12 overflow-y-visible border border-gray-400 rounded-md"
+      >
         <form
           onSubmit={handleGroupChatSubmit}
           className="flex flex-col gap-3  w-80  "
         >
           <div className="flex flex-col">
-            <label htmlFor="name" className="block text-base font-medium text-gray-700 mb-1 ">
+            <label
+              htmlFor="name"
+              className="block text-base font-medium text-gray-700 mb-1 "
+            >
               Name
             </label>
             <input
@@ -323,7 +361,7 @@ export default function Sidebar({
         </button>
       </nav>
 
-      { renderContent()}
+      {renderContent()}
     </section>
   );
 }

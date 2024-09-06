@@ -6,6 +6,7 @@ import { Edit2, Check } from "lucide-react";
 import useTitle from "../hooks/useTitle";
 import ActionButton from "./ActionButton";
 
+
 export default function Profile() {
   const { user, refreshUser } = useAuth();
   const [selectedFile, setSelectedFile] = useState(null);
@@ -60,7 +61,7 @@ export default function Profile() {
       <h1 className="font-bold text-2xl h-14 p-4 bg-gray-300 mb-4 shadow-sm">
         Profile
       </h1>
-      <div className="w-full">
+      <div className="w-full flex flex-col justify-center items-center">
         <div className="mx-auto w-full flex justify-center">
           {user.avatar ? (
             <img
@@ -76,13 +77,14 @@ export default function Profile() {
           onSubmit={handleAvatarSubmit}
           className="mt-2 flex flex-col gap-4"
         >
-          <input
-            className="text-sm mt-2"
+        <input
+            className="ml-11 text-sm mt-2 mx-auto"
             type="file"
             name="avatar"
             accept="image/*"
             onChange={(e) => setSelectedFile(e.target.files[0])}
           />
+         
           <div
             className="w-3/4 flex mx-auto">
 
