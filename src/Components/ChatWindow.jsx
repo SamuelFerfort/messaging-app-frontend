@@ -165,10 +165,10 @@ export default function ChatWindow({ chat, loading, error }) {
 
   if (error) return <div>Error: {error.message}</div>;
 
-  if (!chat) return <section className="w-full h-full chat"> </section>;
+  if (!chat) return <section className="w-full h-full no-chat"> </section>;
 
   return (
-    <section className="max-w-full w-full flex h-full flex-col overflow-y-auto">
+    <section className="max-w-full w-full flex h-full flex-col overflow-y-auto ">
       <header className="h-14 bg-gray-100 flex items-center p-3 gap-3">
         {chat.isGroup ? (
           <GroupAvatar members={chat.receiver} />

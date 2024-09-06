@@ -63,7 +63,7 @@ export default function Login() {
   }
 
   return (
-    <main className="flex justify-center items-center min-h-screen bg-gradient-to-r from-green-200 via-green-400 to-green-600 ">
+    <main className="flex justify-center items-center min-h-screen bg-gradient-to-r from-green-200 via-green-400 to-green-600 login">
       <div className="w-full max-w-md">
         <form
           onSubmit={handleSubmit}

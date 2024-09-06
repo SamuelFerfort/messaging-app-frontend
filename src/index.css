@@ -19,7 +19,17 @@
   background-image: url("./assets/background.jpg");
 }
 body {
-  background-color: #c9c6c0;
+  background-color: #fcc456;
+}
+
+
+.no-chat {
+  
+    background-image: url("./assets/flat-lay-comics-speech-bubble-assortment.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
 }
 
 .login {
