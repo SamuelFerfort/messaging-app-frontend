@@ -6,13 +6,13 @@ import { Edit2, Check } from "lucide-react";
 import useTitle from "../hooks/useTitle";
 import ActionButton from "./ActionButton";
 
-
 export default function Profile() {
   const { user, refreshUser } = useAuth();
   const [selectedFile, setSelectedFile] = useState(null);
   const [about, setAbout] = useState(user.about || "");
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(null);
+  const [error ,setError] = useState(null)
 
   useTitle("Profile");
 
@@ -23,17 +23,23 @@ export default function Profile() {
 
     const formData = new FormData();
     formData.append("avatar", selectedFile);
+    try {
+      const result = await authenticatedFetch("/api/user/upload-avatar", {
+        method: "POST",
+        body: formData,
+      });
 
-    const result = await authenticatedFetch("/api/user/upload-avatar", {
-      method: "POST",
-      body: formData,
-    });
-    setLoading(false);
-    
-    if (result.success) {
-      refreshUser();
-      e.target.elements.avatar.value = null
-      setSelectedFile(null)
+
+      if (result.success) {
+        setError(null)
+        refreshUser();
+        e.target.elements.avatar.value = null;
+        setSelectedFile(null);
+      }
+    } catch (err) {
+        setError(err.message)
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -77,24 +83,22 @@ export default function Profile() {
           onSubmit={handleAvatarSubmit}
           className="mt-2 flex flex-col gap-4"
         >
-        <input
+          <input
             className="ml-11 text-sm mt-2 mx-auto"
             type="file"
             name="avatar"
             accept="image/*"
             onChange={(e) => setSelectedFile(e.target.files[0])}
           />
-         
-          <div
-            className="w-3/4 flex mx-auto">
 
-          <ActionButton
-            loading={loading}
-            idleText={"Change Avatar"}
-            loadingText={"Changing Avatar...."}
-          />
+          <div className="w-3/4 flex mx-auto">
+            <ActionButton
+              loading={loading}
+              idleText={"Change Avatar"}
+              loadingText={"Changing Avatar...."}
+            />
           </div>
-         
+          {error && <span className="text-sm text-red-400 italic text-center">{error}</span>}
         </form>
       </div>
 
