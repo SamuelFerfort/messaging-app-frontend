@@ -235,7 +235,7 @@ export default function ChatWindow({ chat, loading, error }) {
             />
             {imgError && (
               <span className="text-red-400 text-xs italic absolute bottom-6 left-5">
-                Max size is 3 MB
+                Max size is 3MB
               </span>
             )}
 
