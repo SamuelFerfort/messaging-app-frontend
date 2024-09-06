@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 
 const Loading = ({ size = 24 }) => {
   return (
@@ -26,6 +27,9 @@ const Loading = ({ size = 24 }) => {
       </svg>
     </div>
   );
+};
+Loading.propTypes = {
+  size: PropTypes.number,
 };
 
 export default Loading;

@@ -85,6 +85,11 @@ export default function ChatWindow({ chat, loading, error }) {
     enabled: !!chat?.id,
   });
 
+  const addEmoji = (emoji) => {
+    const emojiChar = emoji.native; // Get the native representation of the emoji
+    setNewMessage((prevMessage) => prevMessage + emojiChar);
+  };
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);

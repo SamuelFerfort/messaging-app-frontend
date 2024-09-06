@@ -64,7 +64,6 @@ export default function Sidebar({
     });
 
     socketRef.current.on("new message notification", ({ chatId, message }) => {
-      console.log("Received new message notification:", { chatId, message });
 
       if (activeChat.id === chatId) return;
 
@@ -74,7 +73,6 @@ export default function Sidebar({
           ...prev,
           [chatId]: (prev[chatId] || 0) + 1,
         };
-        console.log("Updated notifications:", newNotifications);
         return newNotifications;
       });
 
@@ -83,7 +81,6 @@ export default function Sidebar({
         const newData = oldData.map((chat) =>
           chat.id === chatId ? { ...chat, lastMessage: message } : chat
         );
-        console.log("Updated chat data:", newData);
         return newData;
       });
     });
