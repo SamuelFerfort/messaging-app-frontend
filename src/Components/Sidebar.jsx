@@ -12,6 +12,7 @@ import Loading from "./Loading";
 const API_URL = import.meta.env.VITE_API_URL;
 const TOKEN_NAME = import.meta.env.VITE_TOKEN_NAME;
 import { io } from "socket.io-client";
+import { useNavigate } from "react-router-dom";
 
 Sidebar.propTypes = {
   handleChatStart: PropTypes.func,
@@ -30,7 +31,6 @@ export default function Sidebar({
     name: null,
     users: null,
   });
-
   const [notifications, setNotifications] = useState({});
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -39,6 +39,7 @@ export default function Sidebar({
   const socketRef = useRef(null);
   const queryClient = useQueryClient();
 
+  const navigate = useNavigate();
   const {
     isLoading: chatsLoading,
     data: chats,
@@ -59,12 +60,17 @@ export default function Sidebar({
 
   useEffect(() => {
     const token = localStorage.getItem(TOKEN_NAME);
+
+    if (!token) {
+      console.error("No token found");
+
+      return navigate("login");
+    }
     socketRef.current = io(API_URL, {
       auth: { token },
     });
 
     socketRef.current.on("new message notification", ({ chatId, message }) => {
-
       if (activeChat.id === chatId) return;
 
       console.log(activeChat === chatId);
