@@ -63,8 +63,9 @@ export default function Sidebar({
 
     if (!token) {
       console.error("No token found");
-
+      
       return navigate("login");
+      
     }
     socketRef.current = io(API_URL, {
       auth: { token },
