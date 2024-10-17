@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 const UserSelect = ({ allUsers, selectedUsers, setSelectedUsers, error}) => {
   const [inputValue, setInputValue] = useState("");
 
-  console.log("all users", allUsers);
+ 
   if (!allUsers) return;
 
   const filteredUsers = allUsers.filter(
