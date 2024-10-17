@@ -68,7 +68,7 @@ export default function Sidebar({
       
     }
     socketRef.current = io(API_URL, {
-      auth: { token },
+      auth: { token }
     });
 
     socketRef.current.on("new message notification", ({ chatId, message }) => {
@@ -92,14 +92,9 @@ export default function Sidebar({
       });
     });
 
-    socketRef.current.on("connect", () => {
-      console.log("Socket connected with ID:", socketRef.current.id);
-    });
+    
 
-    socketRef.current.on("disconnect", () => {
-      console.log("Socket notification disconnected");
-    });
-
+  
     return () => {
       console.log("Cleaning up socket notification connection");
       socketRef.current.disconnect();
