@@ -53,7 +53,6 @@ export default function SignUp() {
     e.preventDefault();
     if (!validateForm()) return;
 
-    console.log(formData);
     try {
       await register(formData);
       navigate("/login");
