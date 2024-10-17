@@ -12,7 +12,7 @@ export default function Profile() {
   const [about, setAbout] = useState(user.about || "");
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(null);
-  const [error ,setError] = useState(null)
+  const [error, setError] = useState(null);
 
   useTitle("Profile");
 
@@ -29,15 +29,14 @@ export default function Profile() {
         body: formData,
       });
 
-
       if (result.success) {
-        setError(null)
+        setError(null);
         refreshUser();
         e.target.elements.avatar.value = null;
         setSelectedFile(null);
       }
     } catch (err) {
-        setError(err.message)
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -98,7 +97,11 @@ export default function Profile() {
               loadingText={"Changing Avatar...."}
             />
           </div>
-          {error && <span className="text-sm text-red-400 italic text-center">{error}</span>}
+          {error && (
+            <span className="text-sm text-red-400 italic text-center">
+              {error}
+            </span>
+          )}
         </form>
       </div>
 
@@ -116,6 +119,7 @@ export default function Profile() {
               type="text"
               name="about"
               id="about"
+              autoComplete="off"
               value={about}
               onChange={(e) => setAbout(e.target.value)}
               placeholder="Write something about you..."
