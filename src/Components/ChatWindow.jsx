@@ -61,8 +61,13 @@ export default function ChatWindow({ chat, loading, error }) {
 
       socketRef.current.on("connect_error", (err) => {
         console.error("Socket connection error:", err);
-      });
 
+        if (err.message === "Session ID unknown") {
+          // Force a reconnect with a fresh session
+          socketRef.current.disconnect();
+          socketRef.current.connect();
+        }
+      });
       socketRef.current.on("new message", (message) => {
         queryClient.invalidateQueries(["chats"]);
 
