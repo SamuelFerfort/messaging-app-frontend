@@ -1,5 +1,5 @@
 const filterItems = (items, filterText, activeTab) => {
-  return items.filter((item) => {
+  return items?.filter((item) => {
     if (activeTab === "chats" || activeTab === "groups") {
       return item.name.toLowerCase().includes(filterText.toLowerCase());
     } else {
