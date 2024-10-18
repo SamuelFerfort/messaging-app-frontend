@@ -48,7 +48,7 @@ export default function ChatWindow({ chat, loading, error }) {
           token: token,
         },
         reconnection: true,
-        reconnectionAttempts: 5,
+        reconnectionAttempts: Infinity,
         reconnectionDelay: 1000,
         reconnectionDelayMax: 5000,
         timeout: 20000,
