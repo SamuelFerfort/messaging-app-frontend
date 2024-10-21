@@ -195,10 +195,14 @@ export default function SignUp() {
           </Link>
         </p>
       </form>
-      <img
-        src="https://res.cloudinary.com/dy0av590l/image/upload/v1729485725/rb_2148561973_oaskxg.webp"
-        className="h-[800px] w-auto"
-      />
+      <div className="relative hidden md:block  w-full max-w-[800px] h-auto aspect-[4/4] ">
+        <img
+          src="https://res.cloudinary.com/dy0av590l/image/upload/v1729485725/rb_2148561973_oaskxg.webp"
+          alt="Login background"
+          className="object-cover w-full h-full"
+          loading="lazy"
+        />
+      </div>
     </main>
   );
 }

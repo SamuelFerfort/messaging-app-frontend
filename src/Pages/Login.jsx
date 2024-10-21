@@ -65,7 +65,7 @@ export default function Login() {
   }
 
   return (
-    <main className="flex justify-center items-center min-h-screen bg-gradient-to-br from-green-400 to-blue-500 login gap-20">
+    <main className="flex justify-center items-center min-h-screen bg-gradient-to-br from-green-400 to-blue-500 login gap-20 ">
       <div className="w-full max-w-md bg-white border-gray-200 border shadow-lg rounded-lg ">
         <form
           onSubmit={handleSubmit}
@@ -140,7 +140,14 @@ export default function Login() {
           </div>
         </form>
       </div>
-      <img src="https://res.cloudinary.com/dy0av590l/image/upload/v1729485725/rb_2148561973_oaskxg.webp"  className="h-[800px] w-auto" />
+      <div className="relative hidden md:block  w-full max-w-[800px] h-auto aspect-[4/4] ">
+      <img
+        src="https://res.cloudinary.com/dy0av590l/image/upload/v1729485725/rb_2148561973_oaskxg.webp"
+        alt="Login background"
+        className="object-cover w-full h-full"
+        loading="lazy"
+      />
+    </div>
     </main>
   );
 }
