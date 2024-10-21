@@ -3,7 +3,7 @@ import { authenticatedFetch } from "../utils/api";
 import { useState, useRef, useEffect } from "react";
 import filterItems from "../utils/filterItems";
 import PropTypes from "prop-types";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import AvatarIcon from "./AvatarIcon";
 import { truncateMessage } from "../utils/truncate";
 import UserSelect from "./UserSelect";
@@ -63,12 +63,11 @@ export default function Sidebar({
 
     if (!token) {
       console.error("No token found");
-      
+
       return navigate("login");
-      
     }
     socketRef.current = io(API_URL, {
-      auth: { token }
+      auth: { token },
     });
 
     socketRef.current.on("new message notification", ({ chatId, message }) => {
@@ -92,9 +91,6 @@ export default function Sidebar({
       });
     });
 
-    
-
-  
     return () => {
       console.log("Cleaning up socket notification connection");
       socketRef.current.disconnect();
@@ -262,12 +258,18 @@ export default function Sidebar({
     <section className="p-4 ">
       <dialog
         ref={dialogRef}
-        className="p-12 overflow-y-visible border border-gray-400 rounded-md"
+        className="p-12 overflow-y-visible border border-gray-400 rounded-md relative"
       >
         <form
           onSubmit={handleGroupChatSubmit}
           className="flex flex-col gap-3  w-80  "
         >
+          <X
+            onClick={() => dialogRef.current.close()}
+            className="absolute top-2 right-2 text-black cursor-pointer"
+            size={19}
+          />
+
           <div className="flex flex-col">
             <label
               htmlFor="name"

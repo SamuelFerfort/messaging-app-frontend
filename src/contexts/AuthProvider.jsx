@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import PropTypes from "prop-types";
 const API_URL = import.meta.env.VITE_API_URL;
 const TOKEN_NAME = import.meta.env.VITE_TOKEN_NAME;
+
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
