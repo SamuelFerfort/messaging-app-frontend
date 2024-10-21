@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import useTitle from "../hooks/useTitle";
 import ActionButton from "../Components/ActionButton";
 import { Mail, KeyRound, CircleUserRound } from "lucide-react";
-import loginBackground from "../assets/login-background.webp";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({

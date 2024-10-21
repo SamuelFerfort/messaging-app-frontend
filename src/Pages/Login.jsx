@@ -5,7 +5,6 @@ import { validateLoginForm } from "../utils/loginValidation";
 import useTitle from "../hooks/useTitle";
 import ActionButton from "../Components/ActionButton";
 import { Mail, KeyRound } from "lucide-react";
-import loginBackground from "../assets/login-background.webp";
 
 export default function Login() {
   const [email, setEmail] = useState("");
