@@ -62,7 +62,7 @@ export default function Profile() {
   }
 
   return (
-    <section className="bg-white h-full">
+    <section className="bg-white h-full overflow-x-hidden">
       <h1 className="font-bold text-2xl h-14 p-4 bg-gray-300 mb-4 shadow-sm">
         Profile
       </h1>
