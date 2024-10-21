@@ -7,7 +7,6 @@
 @layer base {
   body {
     font-family: "Inter";
-    background-image: url("./assets/rm218batch5-mynt-43.jpg");
   }
 }
 
@@ -16,20 +15,17 @@
 }
 
 .chat {
-  background-image: url("./assets/background.jpg");
+  background-image: url("https://res.cloudinary.com/dy0av590l/image/upload/v1729482100/background_x9ycgy.webp");
 }
 body {
   background-color: #fcc456;
 }
 
-
 .no-chat {
-  
-    background-image: url("./assets/flat-lay-comics-speech-bubble-assortment.jpg");
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-
+  background-image: url("https://res.cloudinary.com/dy0av590l/image/upload/v1729482124/flat-lay-comics-speech-bubble-assortment_aeceie.webp");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .login {
