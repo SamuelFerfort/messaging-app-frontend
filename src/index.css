@@ -12,6 +12,8 @@
 
 .lightgray {
   background-color: #202c33;
+  background-color: #d4d0c9;
+
 }
 
 .chat {
@@ -19,6 +21,7 @@
 }
 body {
   background-color: #d4d0c9;
+
 }
 
 .no-chat {

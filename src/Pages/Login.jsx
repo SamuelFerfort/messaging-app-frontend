@@ -5,6 +5,7 @@ import { validateLoginForm } from "../utils/loginValidation";
 import useTitle from "../hooks/useTitle";
 import ActionButton from "../Components/ActionButton";
 import { Mail, KeyRound } from "lucide-react";
+import loginBackground from "../assets/login-background.webp";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -64,11 +65,11 @@ export default function Login() {
   }
 
   return (
-    <main className="flex justify-center items-center min-h-screen bg-gradient-to-r from-green-200 via-green-400 to-green-600 login">
-      <div className="w-full max-w-md">
+    <main className="flex justify-center items-center min-h-screen bg-gradient-to-br from-green-400 to-blue-500 login gap-20">
+      <div className="w-full max-w-md bg-white border-gray-200 border shadow-lg rounded-lg ">
         <form
           onSubmit={handleSubmit}
-          className="bg-white  rounded px-8 pt-6 pb-8 mb-4"
+          className="bg-white  rounded px-8 pt-6 pb-4 mb-4"
         >
           <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
             Log in
@@ -139,6 +140,7 @@ export default function Login() {
           </div>
         </form>
       </div>
+      <img src="https://res.cloudinary.com/dy0av590l/image/upload/v1729485725/rb_2148561973_oaskxg.webp"  className="h-[800px] w-auto" />
     </main>
   );
 }
