@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthProvider";
 import { validateLoginForm } from "../utils/loginValidation";
 import useTitle from "../hooks/useTitle";
 import ActionButton from "../Components/ActionButton";
+import { Mail, KeyRound } from "lucide-react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -72,28 +73,29 @@ export default function Login() {
           <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
             Log in
           </h1>
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <label className="block text-sm font-bold mb-2" htmlFor="email">
               Email
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 pl-10 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               type="email"
               name="email"
               id="email"
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
+              placeholder="test@example.com"
             />
             {error.email && (
               <p className="text-red-500 text-xs italic mt-1">Invalid Email</p>
             )}
+           <Mail className="absolute left-3 top-[38px]  text-gray-400" size={19} />
           </div>
-          <div className="">
+          <div className="relative">
             <label className="block text-sm font-bold mb-2" htmlFor="password">
               Password
             </label>
             <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 pl-10 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
               type="password"
               name="password"
               id="password"
@@ -105,6 +107,7 @@ export default function Login() {
                 Password must be at least 6 characters
               </p>
             )}
+                <KeyRound className="absolute left-3 top-[38px]  text-gray-400" size={19} />
           </div>
           {error.general && (
             <div className="text-red-500 text-sm mb-4">{error.general}</div>

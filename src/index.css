@@ -18,7 +18,7 @@
   background-image: url("https://res.cloudinary.com/dy0av590l/image/upload/v1729482100/background_x9ycgy.webp");
 }
 body {
-  background-color: #fcc456;
+  background-color: #d4d0c9;
 }
 
 .no-chat {
@@ -28,9 +28,7 @@ body {
   background-position: center;
 }
 
-.login {
-  background-image: url("./assets/background.svg");
-}
+
 
 .body-text {
   font-size: 14px;
