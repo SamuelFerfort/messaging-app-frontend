@@ -17,7 +17,7 @@ A messaging app inspired by Telegram and WhatsApp, featuring real-time updates w
 
 ## 🔗 Links
 
-- **Live Demo:** [https://your-messaging-app.vercel.app](https://messaging-app-frontend-gamma.vercel.app/login)
+- **Live Demo:** [https://messaging-app-frontend-gamma.vercel.app/chats](https://messaging-app-frontend-gamma.vercel.app)
 - **Backend Repository:** [https://github.com/SamuelFerfort/messaging-app-backend](https://github.com/SamuelFerfort/messaging-app-backend)
 
 ## 🚀 Technologies
