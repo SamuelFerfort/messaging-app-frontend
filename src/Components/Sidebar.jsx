@@ -63,7 +63,6 @@ export default function Sidebar({
 
     if (!token) {
       console.error("No token found");
-
       return navigate("login");
     }
     socketRef.current = io(API_URL, {
@@ -85,7 +84,7 @@ export default function Sidebar({
       queryClient.setQueryData(["chats"], (oldData) => {
         if (!oldData) return oldData;
         const newData = oldData.map((chat) =>
-          chat.id === chatId ? { ...chat, lastMessage: message } : chat
+          chat.id === chatId ? { ...chat, lastMessage: message } : chat,
         );
         return newData;
       });
@@ -149,6 +148,42 @@ export default function Sidebar({
 
   if (error) return <div>Error fetching data: {error.message}</div>;
 
+  const renderChatOrGroupItem = (chat) => (
+    <button
+      onClick={() => {
+        setActiveChat(chat);
+        setNotifications((prev) => ({ ...prev, [chat.id]: 0 }));
+      }}
+      key={chat.id}
+      className={`flex items-center p-2 hover:bg-gray-100 gap-2 w-full border-b truncate border-gray-300 ${
+        activeChat?.id === chat.id ? "bg-gray-100" : ""
+      }`}
+    >
+      <div className="relative">
+        {chat.receiver[0]?.avatar ? (
+          <img
+            src={chat.receiver[0].avatar}
+            alt={chat.name}
+            className="rounded-full w-10 h-10 object-cover bg-white"
+          />
+        ) : (
+          <AvatarIcon size={40} />
+        )}
+        {notifications[chat.id] > 0 && (
+          <span className="absolute -top-1 -right-1 bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+            {notifications[chat.id]}
+          </span>
+        )}
+      </div>
+      <div className="flex flex-col items-start">
+        <span className="text-lg">{chat.name} </span>
+        <span className="text-xs text-gray-500 overflow-x-hidden">
+          {truncateMessage(chat.lastMessage?.content, 30)}
+        </span>
+      </div>
+    </button>
+  );
+
   const renderContent = () => {
     if (isLoading) {
       return (
@@ -158,45 +193,17 @@ export default function Sidebar({
       );
     }
 
-    const items =
-      activeTab === "chats" || activeTab === "groups" ? chats : users;
-    const filteredItems = filterItems(items, filter, activeTab);
+    const items = activeTab === "users" ? users : chats;
+    // First apply search filter
+    let filteredItems = filterItems(items, filter, activeTab);
 
-    const renderChatOrGroupItem = (chat) => (
-      <button
-        onClick={() => {
-          setActiveChat(chat);
-          setNotifications((prev) => ({ ...prev, [chat.id]: 0 }));
-        }}
-        key={chat.id}
-        className={`flex items-center p-2 hover:bg-gray-100 gap-2 w-full border-b border-gray-300 ${
-          activeChat?.id === chat.id ? "bg-gray-100" : ""
-        }`}
-      >
-        <div className="relative">
-          {chat.receiver[0]?.avatar ? (
-            <img
-              src={chat.receiver[0].avatar}
-              alt={chat.name}
-              className="rounded-full w-10 h-10 object-cover bg-white"
-            />
-          ) : (
-            <AvatarIcon size={40} />
-          )}
-          {notifications[chat.id] > 0 && (
-            <span className="absolute -top-1 -right-1 bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-              {notifications[chat.id]}
-            </span>
-          )}
-        </div>
-        <div className="flex flex-col items-start">
-          <span className="text-lg">{chat.name} </span>
-          <span className="text-xs text-gray-500 overflow-x-hidden">
-            {truncateMessage(chat.lastMessage?.content, 30)}
-          </span>
-        </div>
-      </button>
-    );
+    if (activeTab === "chats") {
+      // Only show non-group chats
+      filteredItems = filteredItems.filter((chat) => !chat.isGroup);
+    } else if (activeTab === "groups") {
+      // Only show group chats
+      filteredItems = filteredItems.filter((chat) => chat.isGroup);
+    }
 
     if (activeTab === "chats") {
       return (
@@ -217,7 +224,6 @@ export default function Sidebar({
                 onClick={async () => {
                   await handleChatStart(user.id);
                   queryClient.invalidateQueries(["chats"]);
-
                   setActiveTabs("chats");
                 }}
                 key={user.id}
@@ -241,11 +247,10 @@ export default function Sidebar({
         </div>
       );
     } else if (activeTab === "groups") {
-      const groups = filteredItems.filter((chat) => chat.isGroup);
       return (
         <div className="overflow-x-hidden">
-          {groups && groups.length > 0 ? (
-            groups.map(renderChatOrGroupItem)
+          {filteredItems && filteredItems.length > 0 ? (
+            filteredItems.map(renderChatOrGroupItem)
           ) : (
             <div className="p-2">No groups found!</div>
           )}

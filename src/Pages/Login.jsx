@@ -39,19 +39,14 @@ export default function Login() {
   }
 
   async function demo() {
-    const demoEmails = [
-      "test@user.com",
-      "test@user2.com",
-      "test@user3.com",
-      "test@user4.com",
-    ];
+    const demoEmails = ["sarah.demo@example.com", "james.demo@example.com"];
 
     const randomDemoEmail =
       demoEmails[Math.floor(Math.random() * demoEmails.length)];
 
     setEmail(randomDemoEmail);
-    setPassword("12345678");
-    const credentials = { email: randomDemoEmail, password: "12345678" };
+    setPassword("demo123");
+    const credentials = { email: randomDemoEmail, password: "demo123" };
     try {
       await login(credentials);
       navigate("/chats", { replace: true });
@@ -88,7 +83,10 @@ export default function Login() {
             {error.email && (
               <p className="text-red-500 text-xs italic mt-1">Invalid Email</p>
             )}
-           <Mail className="absolute left-3 top-[38px]  text-gray-400" size={19} />
+            <Mail
+              className="absolute left-3 top-[38px]  text-gray-400"
+              size={19}
+            />
           </div>
           <div className="relative">
             <label className="block text-sm font-bold mb-2" htmlFor="password">
@@ -107,7 +105,10 @@ export default function Login() {
                 Password must be at least 6 characters
               </p>
             )}
-                <KeyRound className="absolute left-3 top-[38px]  text-gray-400" size={19} />
+            <KeyRound
+              className="absolute left-3 top-[38px]  text-gray-400"
+              size={19}
+            />
           </div>
           {error.general && (
             <div className="text-red-500 text-sm mb-4">{error.general}</div>
@@ -125,7 +126,7 @@ export default function Login() {
               disabled={loading}
               className=" w-full mt-2 className={`w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed `}"
             >
-              Try demo account
+              {loading ? "Logging in as demo user..." : "Try the Live Demo"}
             </button>
             <div className="mt-2">
               No account?{" "}
@@ -140,13 +141,13 @@ export default function Login() {
         </form>
       </div>
       <div className="relative hidden md:block  w-full max-w-[800px] h-auto aspect-[4/4] ">
-      <img
-        src="https://res.cloudinary.com/dy0av590l/image/upload/v1729485725/rb_2148561973_oaskxg.webp"
-        alt="Login background"
-        className="object-cover w-full h-full"
-        loading="lazy"
-      />
-    </div>
+        <img
+          src="https://res.cloudinary.com/dy0av590l/image/upload/v1729485725/rb_2148561973_oaskxg.webp"
+          alt="Login background"
+          className="object-cover w-full h-full"
+          loading="lazy"
+        />
+      </div>
     </main>
   );
 }
