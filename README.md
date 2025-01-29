@@ -1,7 +1,7 @@
 # Messaging App
 
 <p align="center">
-  <img src="https://res.cloudinary.com/dy0av590l/image/upload/v1729663614/Screenshot_from_2024-10-23_08-06-43_r9np75.png" alt="Messaging App screenshot" width="800"/>
+  <img src="https://res.cloudinary.com/dy0av590l/image/upload/v1738121882/154shots_so_ye6fxa.png" alt="Messaging App screenshot" width="800"/>
 </p>
 <p align="center">
   <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite Badge"/>
