@@ -126,7 +126,9 @@ export default function Login() {
               disabled={loading}
               className=" w-full mt-2 className={`w-full bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed `}"
             >
-              {loading ? "Logging in as demo user..." : "Try the Live Demo"}
+              {loading
+                ? "Logging in as random user..."
+                : "Try Demo (Random Account)"}
             </button>
             <div className="mt-2">
               No account?{" "}
